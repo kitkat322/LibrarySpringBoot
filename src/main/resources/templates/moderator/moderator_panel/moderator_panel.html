@@ -1,0 +1,37 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Панель модератора</title>
+<!--    <link rel="stylesheet" href="../static/styles.css">-->
+</head>
+<body>
+
+<h1>Добро пожаловать в панель модератора</h1>
+
+<div style="margin-bottom: 20px;" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+    <form th:action="@{/}" method="get">
+        <button type="submit" class="btn">На главную</button>
+    </form>
+<!--  <form th:action="@{/moderator/issue}" method="get">-->
+<!--    <button type="submit" class="btn">Выдача книг</button>-->
+<!--  </form>-->
+<!--  <form th:action="@{/moderator/return}" method="get">-->
+<!--    <button type="submit" class="btn">Возврат книг</button>-->
+<!--  </form>-->
+<!--  <form th:action="@{/moderator/overdue}" method="get">-->
+<!--    <button type="submit" class="btn">Список просроченных аренд</button>-->
+<!--  </form>-->
+<!--  <form th:action="@{/moderator/allbookings}" method="get">-->
+<!--    <button type="submit" class="btn">Список всех бронирований</button>-->
+<!--  </form>-->
+  <form th:action="@{/moderator/book_operations/book_operations}" method="get">
+    <button type="submit" class="btn">Операции с книгами</button>
+  </form>
+  <form th:action="@{/moderator/moderator_user_operations/moderator_user_list}" method="get">
+    <button type="submit" class="btn">Пользователи и бронирования</button>
+  </form>
+</div>
+
+
+
+</body>
+</html>

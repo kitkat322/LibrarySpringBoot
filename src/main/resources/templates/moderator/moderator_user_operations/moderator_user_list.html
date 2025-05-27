@@ -1,0 +1,42 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+<!--    <link rel="stylesheet" href="../static/styles.css">-->
+</head>
+<body>
+
+<form th:action="@{/}" method="get" style="display: inline;">
+    <button type="submit" class="btn">На главную</button>
+</form>
+
+<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+    <button type="submit">Кабинет модератора</button>
+</form>
+
+<h2>Поиск пользователя</h2>
+<form method="get" th:action="@{/moderator/moderator_user_operations/moderator_user_list}">
+    <input type="text" name="username" placeholder="Имя пользователя" th:value="${username}" />
+    <button type="submit" class="btn">Найти</button>
+</form>
+
+<h2>Список пользователей</h2>
+<table>
+    <thead>
+    <tr><th>Имя пользователя</th><th>Действие</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.username}"></td>
+        <td><a th:href="@{'/moderator/user/' + ${user.id}}" class="btn">Посмотреть бронирования</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" style="display: inline;">
+    <button type="submit" class="btn">Назад</button>
+</form>
+
+</body>
+</html>

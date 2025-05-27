@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -24,10 +24,6 @@ public class DetailsServiceImpl implements UserDetailsService {
 
         if (user == null) {
             throw new UsernameNotFoundException("Пользователь не найден");
-        }
-
-        if (user.isBlocked()) {
-            throw new DisabledException("Пользователь заблокирован");
         }
 
         return new org.springframework.security.core.userdetails.User(

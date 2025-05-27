@@ -1,0 +1,33 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Админ панель</title>
+<!--    <link rel="stylesheet" href="../static/styles.css">-->
+</head>
+<body>
+
+<!--<div sec:authorize="hasAuthority('ADMIN')">-->
+<!--    <a th:href="@{/admin}">Админ-панель</a>-->
+<!--</div>-->
+
+<h1>Добро пожаловать в админ-панель</h1>
+
+<div style="margin-bottom: 20px;">
+    <form th:action="@{/}" method="get"><button type="submit">На главную</button></form>
+
+    <form th:action="@{/user/user_panel/user_panel}" method="get" sec:authorize="hasAnyAuthority('USER','MODERATOR','ADMIN')">
+        <button type="submit">Кабинет пользователя</button>
+    </form>
+
+    <form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+        <button type="submit">Кабинет модератора</button>
+    </form>
+
+    <form th:action="@{/admin/admin_user_operations/admin_user_list}" method="get" sec:authorize="hasAuthority('ADMIN')">
+        <button type="submit">Список пользователей</button>
+    </form>
+
+    <form th:action="@{/logout}" method="get"><button type="submit">Выйти</button></form>
+</div>
+
+</body>
+</html>

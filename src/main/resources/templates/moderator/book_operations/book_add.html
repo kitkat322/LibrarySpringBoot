@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Добавить книгу</title>
+<!--  <link rel="stylesheet" href="../../static/css/styles.css">-->
+</head>
+<body>
+
+<form th:action="@{/static}" method="get" style="display: inline;">
+  <button type="submit" class="btn">На главную</button>
+</form>
+
+<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+  <button type="submit">Кабинет модератора</button>
+</form>
+
+<h1>Добавление новой книги</h1>
+
+<form th:action="@{/moderator/book/add}" method="post">
+  <label>Название:</label>
+  <input type="text" name="title" required /><br>
+
+  <label>Автор:</label>
+  <input type="text" name="author" required /><br>
+
+  <label>Описание:</label>
+  <textarea name="description" required></textarea><br>
+
+  <button type="submit" class="btn">Добавить</button>
+</form>
+
+<form th:action="@{/moderator/book_operations/book_operations}" method="get" style="margin-top: 10px;">
+  <button type="submit" class="btn">Назад</button>
+</form>
+
+</body>
+</html>

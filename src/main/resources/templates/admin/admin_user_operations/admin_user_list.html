@@ -1,0 +1,49 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>Список пользователей</title>
+<!--  <link rel="stylesheet" href="../static/styles.css">-->
+</head>
+<body>
+
+<form th:action="@{/admin}" method="get"><button type="submit">Назад в панель админа</button></form>
+<form th:action="@{/}" method="get"><button type="submit">На главную</button></form>
+
+<h1>Список пользователей</h1>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Логин</th>
+    <th>Роль</th>
+    <th>Заблокирован</th>
+    <th>Действия</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user : ${users}">
+    <td th:text="${user.id}"></td>
+    <td th:text="${user.username}"></td>
+    <td th:text="${user.role}"></td>
+    <td th:text="${user.blocked} ? 'Да' : 'Нет'"></td>
+    <td>
+      <form th:action="@{'/admin/admin_user_operations/admin_user_list/delete/' + ${user.id}}" method="post" th:if="${user.username != 'admin'}">
+        <button type="submit">Удалить</button>
+      </form>
+      <form th:action="@{'/admin/admin_user_operations/admin_user_list/promote/' + ${user.id}}" method="post" th:if="${user.role.name() == 'USER'}">
+        <button type="submit">Сделать модератором</button>
+      </form>
+      <form th:action="@{'/admin/admin_user_operations/admin_user_list/demote/' + ${user.id}}" method="post" th:if="${user.role.name() == 'MODERATOR'}">
+        <button type="submit">Сделать пользователем</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<br>
+
+
+
+</body>
+</html>

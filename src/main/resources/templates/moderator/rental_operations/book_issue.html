@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Выдача книг</title>
+<!--  <link rel="stylesheet" href="/css/styles.css">-->
+</head>
+<body>
+
+<form th:action="@{/moderator/moderator_user_operations/moderator_user_list}" method="get" style="display:inline;">
+  <button type="submit">Назад</button>
+</form>
+
+<form th:action="@{/}" method="get" style="display:inline;">
+  <button type="submit">На главную</button>
+</form>
+
+<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" style="display:inline;">
+  <button type="submit">Кабинет модератора</button>
+</form>
+
+<h2 th:text="'Выдать книги пользователю: ' + ${username}">Выдать книги пользователю:</h2>
+
+<h1>Список книг</h1>
+
+<!-- Поиск -->
+<form th:action="@{/moderator/issue-books}" method="get">
+  <input type="text" name="search" placeholder="Поиск по названию или автору" th:value="${search}" />
+  <button type="submit">Поиск</button>
+</form>
+
+<!-- Сообщения -->
+<p th:if="${message}" th:text="${message}" class="success"></p>
+<p th:if="${error}" th:text="${error}" class="error"></p>
+
+<table>
+  <thead>
+  <tr><th>Название</th><th>Автор</th><th>Действие</th></tr>
+  </thead>
+  <tbody>
+  <tr th:each="book : ${books}">
+    <td><a th:href="@{'/moderator/book/' + ${book.id}}" th:text="${book.title}">Книга</a></td>
+    <td th:text="${book.author}">Автор</td>
+    <td>
+      <div th:if="${book.available}">
+        <form th:action="@{'/moderator/book/' + ${book.id} + '/issue'}" method="post">
+          <input type="hidden" name="username" th:value="${username}" />
+          <input type="hidden" name="userId" th:value="${userId}" />
+          <button type="submit">Выдать книгу</button>
+        </form>
+      </div>
+      <span th:if="${!book.available}">Недоступна</span>
+
+      <div th:if="${messages != null and messages[book.id] != null}"
+           th:text="${messages[book.id]}"
+           th:classappend="${messageTypes[book.id]} == 'success' ? ' success-message' : ' error-message'">
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

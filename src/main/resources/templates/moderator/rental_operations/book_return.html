@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Возврат книг</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        .btn { padding: 5px 10px; background-color: #1976d2; color: white; border: none; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<h2>Возврат книг</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Пользователь</th>
+        <th>Книга</th>
+        <th>Дата начала аренды</th>
+        <th>Срок возврата</th>
+        <th>Просрочена?</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="booking : ${activeRentals}">
+        <td th:text="${booking.user.username}"></td>
+        <td th:text="${booking.book.title}"></td>
+        <td th:text="${#temporals.format(booking.rentStartDate, 'dd.MM.yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(booking.rentEndDate, 'dd.MM.yyyy HH:mm')}"></td>
+        <td th:text="${booking.rentEndDate.isBefore(T(java.time.LocalDateTime).now()) ? 'Да' : 'Нет'}"></td>
+        <td>
+            <form th:action="@{/moderator/book_return/confirm}" method="post">
+                <input type="hidden" name="bookingId" th:value="${booking.id}" />
+                <button type="submit" class="btn">Подтвердить возврат</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:href="@{/moderator/moderator_panel/moderator_panel}">Назад</a>
+</body>
+</html>
