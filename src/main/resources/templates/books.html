@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список книг</title>
+    <link rel="stylesheet" href="/css/stylesBooks.css?v=1.0">
+
+</head>
+<body>
+
+<form th:action="@{/}" method="get" style="display: inline;">
+    <button type="submit" class="btn">На главную</button>
+</form>
+
+<form th:action="@{/user/account}" method="get" style="display: inline;">
+    <button type="submit" class="btn">Кабинет пользователя</button>
+</form>
+
+<h1>Книги в библиотеке</h1>
+
+<form th:action="@{/books}" method="get">
+    <input type="text" name="query" placeholder="Название или автор книги" th:value="${param.query}" />
+    <button type="submit" class="btn">Поиск</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Автор</th>
+        <th>Статус</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book, iterStat : ${books}">
+        <td th:text="${book.title}">Название</td>
+        <td th:text="${book.author}">Автор</td>
+        <td th:text="${book.available ? 'Доступна' : 'Недоступна'}"></td>
+        <td>
+            <form th:if="${#authorization.expression('isAuthenticated()') and book.available and !isBlocked}"
+                  th:action="@{'/books/' + ${book.id} + '/reserve'}"
+                  method="post">
+                <button type="submit" class="btn">Забронировать</button>
+            </form>
+
+            <form th:if="${#authorization.expression('!isAuthenticated()') and book.available}"
+                  th:action="@{/login}" method="get">
+                <button type="submit" class="btn">Забронировать</button>
+            </form>
+            <span th:if="${messages != null and messages[book.id] != null}"
+                  th:text="${messages[book.id]}"
+                  th:classappend="${messageTypes[book.id]} == 'success' ? ' success-message' : ' error-message'">
+                </span>
+
+            <span th:if="${isBlocked and #authorization.expression('isAuthenticated()') and book.available}"
+                  class="error-message">
+    Вы заблокированы и не можете бронировать книги
+</span>
+
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="pagination" th:if="${totalPages > 1}">
+    <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{/books(page=${i}, query=${param.query})}"
+           th:text="${i}"
+           th:classappend="${i == currentPage ? ' current-page' : ''}">1</a>
+    </span>
+</div>
+
+</body>
+</html>
