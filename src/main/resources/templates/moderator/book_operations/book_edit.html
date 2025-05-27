@@ -7,20 +7,22 @@
 </head>
 <body>
 
-<form th:action="@{/static}" method="get" style="display: inline;">
+<form th:action="@{/}" method="get" style="display: inline;">
   <button type="submit" class="btn">На главную</button>
 </form>
 
-<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+<form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
   <button type="submit">Кабинет модератора</button>
 </form>
 
-<form th:action="@{/moderator/book_operations/book_operations}" method="get" style="margin-top: 10px;">
+<form th:action="@{/moderator/book/{id}(id=${book.id})}" method="get" style="margin-top: 10px;">
   <button type="submit" class="btn">Назад</button>
+</form>
 
 <h1>Редактирование книги</h1>
 
 <form th:action="@{/moderator/book/edit}" method="post">
+<!--  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
   <input type="hidden" name="id" th:value="${book.id}" />
 
   <label>Название:</label>
@@ -35,7 +37,11 @@
   <button type="submit" class="btn">Сохранить изменения</button>
 </form>
 
+<br><br>
 
+<form th:action="@{/moderator/book/delete/{id}(id=${book.id})}" method="post"
+      th:onsubmit="return confirm('Вы уверены, что хотите удалить эту книгу?');" style="display:inline;">
+  <button type="submit" class="btn btn-danger">Удалить эту книгу</button>
 </form>
 
 </body>

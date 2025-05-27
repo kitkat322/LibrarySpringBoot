@@ -7,11 +7,11 @@
     <button type="submit" class="btn">На главную</button>
 </form>
 
-<form th:action="@{/moderator/moderator_user_operations/moderator_user_list}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+<form th:action="@{/moderator/user/user_list}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
     <button type="submit">Назад</button>
 </form>
 
-<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+<form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
     <button type="submit">Кабинет модератора</button>
 </form>
 
@@ -43,7 +43,6 @@
 <h3>Книги в аренде</h3>
 <table>
     <tr><th>Книга</th><th>Автор</th><th>Дата начала</th><th>Вернуть до</th><th>Статус</th><th>Действие</th></tr>
-<!--    <tr th:each="b : ${taken}">-->
 
     <tr th:each="b : ${taken}"
         th:classappend="${b.status} == 'EXPIRED' ? 'expired-booking' : ''">

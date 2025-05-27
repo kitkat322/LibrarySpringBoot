@@ -1,8 +1,8 @@
-package org.example.libraryspringboot.controller;
+package org.example.libraryspringboot.controller.moderator;
+
 
 import lombok.RequiredArgsConstructor;
 import org.example.libraryspringboot.entity.Book;
-import org.example.libraryspringboot.entity.Booking;
 import org.example.libraryspringboot.entity.User;
 import org.example.libraryspringboot.service.BookService;
 import org.example.libraryspringboot.service.BookingService;
@@ -15,68 +15,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
 @RequiredArgsConstructor
-@RequestMapping("/moderator")
-public class ModeratorController {
+@Controller
+public class ModeratorRentalController {
 
-    private final BookingService bookingService;
-    private final BookService bookService;
     private final UserService userService;
+    private final BookService bookService;
+    private final BookingService bookingService;
 
-    @GetMapping("moderator_panel/moderator_panel")
-    public String moderatorDashboard() {
-        return "moderator/moderator_panel/moderator_panel";
-    }
 
-    @GetMapping("/moderator_user_operations/moderator_user_list")
-    public String listUsers(@RequestParam(value = "username", required = false) String username, Model model) {
-        List<User> users = (username != null && !username.isEmpty())
-                ? userService.findUsersByUsernameContaining(username)
-                : userService.getAllUsers();
-        model.addAttribute("users", users);
-        model.addAttribute("username", username);
-        return "moderator/moderator_user_operations/moderator_user_list";
-    }
 
-    @GetMapping("/user/{userId}")
-    public String userBookings(@PathVariable int userId, Model model) {
-        bookingService.updateExpiredBookings();
-
-        User user = userService.findUserById(userId);
-        model.addAttribute("user", user);
-
-        model.addAttribute("booked", bookingService.getUserBookingsByStatus(user, Booking.Status.BOOKED));
-        model.addAttribute("taken", bookingService.getActiveRentals(user.getUsername()));
-        model.addAttribute("overdue", bookingService.getUserOverdueRentals(user));
-        model.addAttribute("returned", bookingService.getUserBookingsByStatus(user, Booking.Status.RETURNED));
-
-        return "moderator/moderator_user_operations/user_bookings";
-    }
-
-    @PostMapping("/issue/confirm")
-    public String confirmIssue(@RequestParam int bookingId, @RequestParam int userId) {
-        bookingService.confirmIssue(bookingId);
-        return "redirect:/moderator/user/" + userId;
-    }
-
-    @PostMapping("/book_return/confirm")
-    public String confirmReturnFromUserPage(@RequestParam int bookingId, @RequestParam int userId) {
-        bookingService.confirmReturn(bookingId);
-        return "redirect:/moderator/user/" + userId;
-    }
-
-    @GetMapping("/book_operations/book_operations")
-    public String bookOperations(@RequestParam(value = "search", required = false) String search, Model model) {
-        List<Book> books = (search != null && !search.isBlank())
-                ? bookService.searchBooksByTitleOrAuthor(search)
-                : bookService.getAllBooks();
-        model.addAttribute("books", books);
-        model.addAttribute("search", search);
-        return "moderator/book_operations/book_operations";
-    }
-
-    @GetMapping("/issue-books")
+    //мануальная выдача книг через список книг
+    @GetMapping("/moderator/issue-books")
     public String showIssueBooks(@RequestParam int userId,
                                  @RequestParam(value = "search", required = false) String search,
                                  @ModelAttribute("messages") Map<Integer, String> messages,
@@ -99,7 +49,9 @@ public class ModeratorController {
         return "moderator/rental_operations/book_issue";
     }
 
-    @PostMapping("/book/{id}/issue")
+
+    //запрос на подтверждение выдачи книги
+    @PostMapping("/moderator/book/{id}/issue")
     public String issueBookToUser(@PathVariable int id,
                                   @RequestParam String username,
                                   @RequestParam int userId,
@@ -134,5 +86,20 @@ public class ModeratorController {
         model.addAttribute("messageTypes", messageTypes);
 
         return "moderator/rental_operations/book_issue";
+    }
+
+    //подтверждение запроса гет о подтверждении выдачи книги
+    @PostMapping("/moderator/issue/confirm")
+    public String confirmIssue(@RequestParam int bookingId, @RequestParam int userId) {
+        bookingService.confirmIssue(bookingId);
+        return "redirect:/moderator/user/" + userId;
+    }
+
+
+    //подтверждение запроса гет о возврате книги
+    @PostMapping("/moderator/book_return/confirm")
+    public String confirmReturnFromUserPage(@RequestParam int bookingId, @RequestParam int userId) {
+        bookingService.confirmReturn(bookingId);
+        return "redirect:/moderator/user/" + userId;
     }
 }

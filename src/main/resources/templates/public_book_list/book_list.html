@@ -8,11 +8,11 @@
 </head>
 <body>
 
-<form th:action="@{/static}" method="get" style="display: inline;">
+<form th:action="@{/}" method="get" style="display: inline;">
     <button type="submit" class="btn">На главную</button>
 </form>
 
-<form th:action="@{/user/user_panel/user_panel}" method="get" style="display: inline;">
+<form th:action="@{/user/user_panel}" method="get" style="display: inline;">
     <button type="submit" class="btn">Кабинет пользователя</button>
 </form>
 
@@ -38,9 +38,15 @@
         <td th:text="${book.author}">Автор</td>
         <td th:text="${book.available ? 'Доступна' : 'Недоступна'}"></td>
         <td>
+<!--            <form th:if="${#authorization.expression('isAuthenticated()') and book.available and !isBlocked}"-->
+<!--                  th:action="@{'/books/' + ${book.id} + '/reserve'}"-->
+<!--                  method="post">-->
+<!--                <button type="submit" class="btn">Забронировать</button>-->
+<!--            </form>-->
             <form th:if="${#authorization.expression('isAuthenticated()') and book.available and !isBlocked}"
                   th:action="@{'/books/' + ${book.id} + '/reserve'}"
                   method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="btn">Забронировать</button>
             </form>
 

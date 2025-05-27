@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<form th:action="@{/moderator/moderator_user_operations/moderator_user_list}" method="get" style="display:inline;">
+<form th:action="@{/moderator/user/{userId}(id=${userId})}" method="get" style="display:inline;">
   <button type="submit">Назад</button>
 </form>
 
@@ -15,7 +15,7 @@
   <button type="submit">На главную</button>
 </form>
 
-<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" style="display:inline;">
+<form th:action="@{/moderator/moderator_panel}" method="get" style="display:inline;">
   <button type="submit">Кабинет модератора</button>
 </form>
 

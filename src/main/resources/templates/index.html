@@ -15,7 +15,7 @@
 
 <div th:if="${#authorization.expression('isAuthenticated()')}">
 
-    <form th:action="@{/user/user_panel/user_panel}" method="get" style="display: inline;">
+    <form th:action="@{/user/user_panel}" method="get" style="display: inline;">
         <button type="submit" class="btn">Кабинет пользователя</button>
     </form>
 
@@ -23,7 +23,7 @@
         <button type="submit" class="btn">Панель админа</button>
     </form>
 
-    <form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" style="display: inline;" th:if="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')')}">
+    <form th:action="@{/moderator/moderator_panel}" method="get" style="display: inline;" th:if="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')')}">
         <button type="submit" class="btn">Кабинет модератора</button>
     </form>
 

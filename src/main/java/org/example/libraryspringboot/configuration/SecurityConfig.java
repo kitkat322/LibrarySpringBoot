@@ -19,6 +19,8 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Configuration
 @EnableWebSecurity
@@ -75,7 +77,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable)
+                //.csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/books/*/reserve") // если нужно отключить только для бронирования
+                )
                 .requestCache(cache -> cache.requestCache(requestCache()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_URLS).permitAll()
@@ -110,6 +115,13 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public SpringTemplateEngine templateEngine() {
+//        SpringTemplateEngine engine = new SpringTemplateEngine();
+//        engine.addDialect(new SpringSecurityDialect());  // <== ЭТО ВАЖНО
+//        return engine;
+//    }
 }
 
 

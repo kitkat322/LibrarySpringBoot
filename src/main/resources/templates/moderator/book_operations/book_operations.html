@@ -34,7 +34,7 @@
   <button type="submit" class="btn">На главную</button>
 </form>
 
-<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+<form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
   <button type="submit">Кабинет модератора</button>
 </form>
 
@@ -46,7 +46,7 @@
   </form>
 </div>
 <div style="margin-bottom: 20px;">
-  <form th:action="@{/moderator/book_operations/book_operations}" method="get">
+  <form th:action="@{/moderator/book/book_list}" method="get">
     <input type="text" name="search" placeholder="Поиск по названию или автору" th:value="${search}" style="padding: 5px; width: 300px;">
     <button type="submit" class="btn">Поиск</button>
   </form>
@@ -63,27 +63,31 @@
   </thead>
   <tbody>
 <!--  <tr th:each="book : ${books}" th:onclick="'window.location.href=\'' + @{/moderator/book/{id}(id=${book.id})} + '\''">-->
-<tr th:each="book : ${books}"
-    th:onclick="|window.location.href='@{/moderator/book/{id}(id=${book.id})}'|">
-    <td th:text="${book.title}">Название</td>
-    <td th:text="${book.author}">Автор</td>
-    <td th:text="${book.description}">Описание</td>
-    <td class="actions">
-      <form th:action="@{/moderator/book/edit/{id}(id=${book.id})}" method="get">
-        <button type="submit" class="btn">Редактировать</button>
-      </form>
-      <form th:action="@{/moderator/book/delete/{id}(id=${book.id})}"
-            method="post"
-            th:onsubmit="|return confirm('Вы уверены, что хотите удалить эту книгу?');|">
-        <button type="submit" class="btn btn-danger">Удалить</button>
-      </form>
-    </td>
-  </tr>
+<tr th:each="book : ${books}">
+  <td th:onclick="|window.location.href='@{/moderator/book/{id}(id=${book.id})}'|"
+      style="cursor: pointer; color: blue; text-decoration: underline;">
+    <span th:text="${book.title}">Название</span>
+  </td>
+  <td th:text="${book.author}">Автор</td>
+  <td th:text="${book.description}">Описание</td>
+  <td class="actions">
+    <form th:action="@{/moderator/book/edit/{id}(id=${book.id})}" method="get" style="display:inline;">
+      <button type="submit" class="btn">Редактировать</button>
+    </form>
+
+    <form th:action="@{/moderator/book/delete/{id}(id=${book.id})}"
+          method="post"
+          th:onsubmit="return confirm('Вы уверены, что хотите удалить эту книгу?');"
+          style="display:inline;">
+      <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+  </td>
+</tr>
   </tbody>
 </table>
 
 <div style="margin-top: 30px;">
-  <form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get">
+  <form th:action="@{/moderator/moderator_panel}" method="get">
     <button type="submit" class="btn">Назад к панели</button>
   </form>
 </div>

@@ -1,5 +1,6 @@
 package org.example.libraryspringboot.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.libraryspringboot.entity.Book;
 import org.example.libraryspringboot.entity.User;
 import org.example.libraryspringboot.service.BookService;
@@ -15,31 +16,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class BookController {
 
     @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
     @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
-    private BookingService bookingService;
-
-//    @GetMapping("/books")
-//    public String listBooks(@RequestParam(value = "query", required = false) String query, Model model) {
-//        List<Book> books;
-//
-//        if (query != null && !query.trim().isEmpty()) {
-//            books = bookService.searchBooksByTitleOrAuthor(query.trim());
-//        } else {
-//            books = bookService.getAllBooks();
-//        }
-//
-//        model.addAttribute("books", books);
-//        return "books";
-//    }
+    private final BookingService bookingService;
 
     @GetMapping("/books")
     public String showBooks(@RequestParam(value = "query", required = false) String query,
@@ -47,9 +35,7 @@ public class BookController {
                             @AuthenticationPrincipal UserDetails userDetails,
                             Model model) {
 
-
         bookingService.updateExpiredBookings();
-
 
         // Получаем пользователя
         User user = null;
@@ -66,6 +52,6 @@ public class BookController {
         model.addAttribute("books", books);
 
         // другие параметры пагинации, сообщений и т.д.
-        return "book_list";
+        return "public_book_list/book_list";
     }
 }

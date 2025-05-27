@@ -10,12 +10,12 @@
     <button type="submit" class="btn">На главную</button>
 </form>
 
-<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+<form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
     <button type="submit">Кабинет модератора</button>
 </form>
 
 <h2>Поиск пользователя</h2>
-<form method="get" th:action="@{/moderator/moderator_user_operations/moderator_user_list}">
+<form method="get" th:action="@{/moderator/user/user_list}">
     <input type="text" name="username" placeholder="Имя пользователя" th:value="${username}" />
     <button type="submit" class="btn">Найти</button>
 </form>
@@ -34,7 +34,7 @@
 </table>
 
 <br>
-<form th:action="@{/moderator/moderator_panel/moderator_panel}" method="get" style="display: inline;">
+<form th:action="@{/moderator/moderator_panel}" method="get" style="display: inline;">
     <button type="submit" class="btn">Назад</button>
 </form>
 
