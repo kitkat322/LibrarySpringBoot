@@ -1,0 +1,176 @@
+/* Общие стили для страницы */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* Секция приветствия */
+#welcome-section {
+    text-align: center; /* Центрирует содержимое по горизонтали */
+    margin: 40px 0; /* Добавляет отступ сверху и снизу */
+}
+
+#welcome-section h1 {
+    font-size: 2.5rem; /* Увеличиваем размер заголовка */
+    color: #333; /* Цвет текста */
+}
+
+/* Контейнер для кнопок "Войти" и "Регистрация" */
+.button-container {
+    display: flex; /* Выравниваем кнопки в ряд */
+    justify-content: center; /* Центрируем их по горизонтали */
+    gap: 15px; /* Расстояние между кнопками */
+    margin-top: 20px; /* Отступ сверху от полей ввода */
+}
+
+.button-container form {
+    display: inline; /* Сохраняем кнопки формы на одном уровне */
+    margin: 0; /* Убираем лишние отступы формы */
+}
+
+.button-container button {
+    padding: 10px 20px; /* Простые стильные отступы кнопок */
+    background-color: #007BFF; /* Синий фон кнопок */
+    border: none; /* Без границ */
+    border-radius: 5px; /* Закруглённые края */
+    color: #fff; /* Белый текст */
+    cursor: pointer; /* Указатель мыши при наведении */
+    font-size: 14px; /* Размер текста кнопок */
+    transition: 0.2s; /* Плавный переход при наведении */
+}
+
+.button-container button:hover {
+    background-color: #0056b3; /* Тёмно-синий фон кнопок при наведении */
+}
+
+/* Контейнер для кнопок */
+#button-container {
+    display: flex; /* Flexbox для выравнивания кнопок по одному уровню */
+    justify-content: center; /* Центрирует кнопки в горизонтальном направлении */
+    gap: 15px; /* Расстояние между кнопками */
+    margin-top: 20px; /* Добавляем отступ сверху */
+}
+
+#button-container form {
+    margin: 0; /* Убираем стандартные отступы формы */
+}
+
+/* Шапка с кнопками */
+.header-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Стили для заголовков */
+h2, h3 {
+    margin-top: 20px;
+    color: #007BFF;
+}
+
+/* Таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Ключевые состояния таблиц */
+.expired-booking {
+    background-color: #ffefef;
+}
+
+.expired-booking td {
+    color: #d9534f;
+    font-weight: bold;
+}
+
+/* Стили для кнопок в таблице */
+table button {
+    padding: 5px 10px;
+    font-size: 12px;
+    background-color: #28a745;
+    border-radius: 4px;
+}
+
+table button:hover {
+    background-color: #218838;
+}
+
+table button:disabled {
+    background-color: #c3e6cb;
+    cursor: not-allowed;
+}
+
+/* Мелкие стили для переходов */
+form {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+/* Контейнер для полей ввода */
+.input-container {
+    display: flex; /* Используем Flexbox */
+    flex-direction: column; /* Размещаем метку и поле ввода строго друг под другом */
+    margin-bottom: 15px; /* Пространство между полями */
+}
+
+/* Стили для полей ввода */
+.input-container input {
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px; /* Отступ между меткой и полем ввода */
+    width: 100%; /* Поля заполняют всю ширину контейнера */
+    box-sizing: border-box; /* Учитываем padding и border в ширине */
+}
+
+.input-container label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}

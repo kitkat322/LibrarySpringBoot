@@ -1,4 +1,4 @@
-package org.example.libraryspringboot.controller;
+package org.example.libraryspringboot.controller.utility;
 
 
 import lombok.RequiredArgsConstructor;

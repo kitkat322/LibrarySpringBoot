@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Операции с книгами</title>
-<!--  <link rel="stylesheet" href="../../static/css/styles.css">-->
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: left;
-    }
-    tr:hover {
-      background-color: #f5f5f5;
-      cursor: pointer;
-    }
-    .actions {
-      display: flex;
-      gap: 10px;
-    }
-    .actions form {
-      display: inline;
-    }
-  </style>
+  <link rel="stylesheet" href="/css/styles.css">
+<!--  <style>-->
+<!--    table {-->
+<!--      width: 100%;-->
+<!--      border-collapse: collapse;-->
+<!--      margin-top: 20px;-->
+<!--    }-->
+<!--    th, td {-->
+<!--      border: 1px solid #ccc;-->
+<!--      padding: 10px;-->
+<!--      text-align: left;-->
+<!--    }-->
+<!--    tr:hover {-->
+<!--      background-color: #f5f5f5;-->
+<!--      cursor: pointer;-->
+<!--    }-->
+<!--    .actions {-->
+<!--      display: flex;-->
+<!--      gap: 10px;-->
+<!--    }-->
+<!--    .actions form {-->
+<!--      display: inline;-->
+<!--    }-->
+<!--  </style>-->
 </head>
 <body>
 
@@ -35,7 +35,7 @@
 </form>
 
 <form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
-  <button type="submit">Кабинет модератора</button>
+  <button type="submit">Назад в кабинет модератора</button>
 </form>
 
 <h1>Операции с книгами</h1>

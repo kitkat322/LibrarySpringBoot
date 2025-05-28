@@ -150,12 +150,13 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findAll();
     }
 
-    public boolean issueBookManually(int bookId, String username) {
+    @Override
+    public boolean issueBookManually(int bookId, int userId) {
         Book book = bookService.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Книга не найдена"));
         if (!book.isAvailable()) return false;
 
-        User user = userService.findByUsername(username);
+        User user = userService.findUserById(userId);
         if (user == null) {
             throw new RuntimeException("Пользователь не найден");
         }

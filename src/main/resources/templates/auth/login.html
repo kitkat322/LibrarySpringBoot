@@ -3,34 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Вход</title>
-<!--    <link th:href="@{/css/styles.css}">-->
-
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
+<!-- На главную -->
 <form th:action="@{/}" method="get" style="display: inline;">
     <button type="submit" class="btn">На главную</button>
 </form>
 
 <h2>Вход в систему</h2>
 
-<div th:if="${param.error}" class="error-message">Неверное имя пользователя или пароль</div>
-<div th:if="${param.logout}" class="success-message">Вы вышли из системы</div>
-
-<div th:if="${#authorization.expression('!isAuthenticated()')}">
-    <form th:action="@{/registration}" method="get" style="display: inline;">
+<!-- Кнопка "Регистрация" -->
+<div class="button-container">
+    <form th:action="@{/registration}" method="get">
         <button type="submit" class="btn">Регистрация</button>
     </form>
 </div>
 
+
+<div th:if="${param.error}" class="error-message">Неверное имя пользователя или пароль</div>
+<div th:if="${param.logout}" class="success-message">Вы вышли из системы</div>
+
+<!-- Форма входа -->
 <form th:action="@{/login}" method="post">
-    <label for="username">Имя пользователя</label>
-    <input type="text" name="username" id="username" required />
+    <div class="input-container">
+        <label for="username">Имя пользователя</label>
+        <input type="text" name="username" id="username" required />
+    </div>
+    <div class="input-container">
+        <label for="password">Пароль</label>
+        <input type="password" name="password" id="password" required />
+    </div>
 
-    <label for="password">Пароль</label>
-    <input type="password" name="password" id="password" required />
-
-    <button type="submit" class="btn">Войти</button>
+    <!-- Кнопки "Войти" и "Регистрация" -->
+    <div class="button-container">
+        <button type="submit" class="btn">Войти</button>
+    </div>
 </form>
 
 </body>

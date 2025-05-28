@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Выдача книг</title>
-<!--  <link rel="stylesheet" href="/css/styles.css">-->
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
-<form th:action="@{/moderator/user/{userId}(id=${userId})}" method="get" style="display:inline;">
+<form th:action="@{/moderator/user/{userId}(userId=${userId})}" method="get" style="display:inline;">
   <button type="submit">Назад</button>
 </form>
 
@@ -24,7 +24,9 @@
 <h1>Список книг</h1>
 
 <!-- Поиск -->
-<form th:action="@{/moderator/issue-books}" method="get">
+<!--<form th:action="@{/moderator/rental/book_issue_list}" method="get">-->
+<form th:action="@{/moderator/rental/user/{userId}/book_issue_list(userId=${userId})}"
+      method="get">
   <input type="text" name="search" placeholder="Поиск по названию или автору" th:value="${search}" />
   <button type="submit">Поиск</button>
 </form>
@@ -43,9 +45,16 @@
     <td th:text="${book.author}">Автор</td>
     <td>
       <div th:if="${book.available}">
-        <form th:action="@{'/moderator/book/' + ${book.id} + '/issue'}" method="post">
-          <input type="hidden" name="username" th:value="${username}" />
-          <input type="hidden" name="userId" th:value="${userId}" />
+<!--        <form th:action="@{'/moderator/rental/book_issue_list/book/' + ${book.id} + '/issue_confirm'}" -->
+<!--              method="post">-->
+<!--          <input type="hidden" name="username" th:value="${username}" />-->
+<!--          <input type="hidden" name="userId" th:value="${userId}" />-->
+<!--          <button type="submit">Выдать книгу</button>-->
+<!--        </form>-->
+        <form th:action="@{/moderator/rental/user/{userId}/book_issue_list/book/{id}/issue_confirm(userId=${userId}, id=${book.id})}"
+              method="post">
+<!--          <input type="hidden" name="username" th:value="${username}" />-->
+          <input type="hidden" name="search" th:value="${search}" />
           <button type="submit">Выдать книгу</button>
         </form>
       </div>

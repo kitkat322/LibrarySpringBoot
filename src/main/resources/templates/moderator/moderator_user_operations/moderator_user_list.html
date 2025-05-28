@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Пользователи</title>
-<!--    <link rel="stylesheet" href="../static/styles.css">-->
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
@@ -11,7 +11,7 @@
 </form>
 
 <form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
-    <button type="submit">Кабинет модератора</button>
+    <button type="submit">Назад в кабинет модератора</button>
 </form>
 
 <h2>Поиск пользователя</h2>

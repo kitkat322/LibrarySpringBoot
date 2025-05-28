@@ -26,7 +26,8 @@ public interface BookingService {
     List<Booking> getUserBookingsByStatus(User user, Booking.Status status);
     List<Booking> getUserOverdueRentals(User user);
 
-    boolean issueBookManually(int bookId, String username);
+    //boolean issueBookManually(int bookId, String username);
+    boolean issueBookManually(int bookId, int userId);
     void updateBlockStatus(User user);
 
     void updateExpiredBookings();

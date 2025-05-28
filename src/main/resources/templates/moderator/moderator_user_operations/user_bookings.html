@@ -1,96 +1,161 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head><title>Бронирования пользователя</title></head>
-<!--<link rel="stylesheet" href="../static/styles.css">-->
+<head>
+    <title>Бронирования пользователя</title>
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <!--    <style>-->
+<!--        table {-->
+<!--            width: 100%;-->
+<!--            border-collapse: collapse;-->
+<!--            margin: 20px 0;-->
+<!--            font-size: 1rem;-->
+<!--            text-align: left;-->
+<!--        }-->
+<!--        th, td {-->
+<!--            border: 1px solid #ddd;-->
+<!--            padding: 8px;-->
+<!--        }-->
+<!--        th {-->
+<!--            background-color: #f2f2f2;-->
+<!--        }-->
+<!--        .expired-booking {-->
+<!--            background-color: #ffefef;-->
+<!--        }-->
+<!--        button {-->
+<!--            padding: 5px 10px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        .header-buttons {-->
+<!--            display: flex;-->
+<!--            gap: 10px;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+<!--    </style>-->
+</head>
 <body>
 
-<form th:action="@{/}" method="get" style="display: inline;">
-    <button type="submit" class="btn">На главную</button>
-</form>
+<div class="header-buttons">
+    <form th:action="@{/}" method="get">
+        <button type="submit" class="btn">На главную</button>
+    </form>
 
-<form th:action="@{/moderator/user/user_list}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
-    <button type="submit">Назад</button>
-</form>
+    <form th:action="@{/moderator/user/user_list}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+        <button type="submit">Назад</button>
+    </form>
 
-<form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
-    <button type="submit">Кабинет модератора</button>
-</form>
+    <form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
+        <button type="submit">Кабинет модератора</button>
+    </form>
+</div>
 
-<form th:action="@{/moderator/issue-books}" method="get" style="margin-top: 10px;">
+<form th:action="@{/moderator/rental/user/{userId}/book_issue_list(userId=${user.id})}" method="get" style="margin-top: 10px;">
     <input type="hidden" name="userId" th:value="${user.id}" />
     <button type="submit">Выдать книги</button>
 </form>
 
 <h2 th:text="'Бронирования пользователя: ' + ${user.username}"></h2>
 
+<!-- Активные бронирования -->
 <h3>Активные бронирования</h3>
 <table>
-    <tr><th>Книга</th><th>Автор</th><th>Дата брони</th><th>Действие</th></tr>
+    <thead>
+    <tr>
+        <th>Книга</th>
+        <th>Автор</th>
+        <th>Дата бронирования</th>
+        <th>Срок действия</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
     <tr th:each="b : ${booked}">
         <td th:text="${b.book.title}"></td>
         <td th:text="${b.book.author}"></td>
         <td th:text="${#temporals.format(b.bookingDate, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${#temporals.format(b.pickupDeadline, 'dd.MM.yyyy HH:mm')}"></td>
         <td>
-            <form th:action="@{/moderator/issue/confirm}" method="post">
-                <input type="hidden" name="bookingId" th:value="${b.id}" />
-                <input type="hidden" name="userId" th:value="${b.user.id}" />
+            <form th:action="@{/moderator/rental/user/{userId}/book_issue/booking{bookingId}/confirm(userId=${b.user.id}, bookingId=${b.id})}" method="post">
                 <button type="submit">Подтвердить выдачу</button>
             </form>
         </td>
     </tr>
+    </tbody>
 </table>
 
+<!-- Книги в аренде -->
 <h3>Книги в аренде</h3>
 <table>
-    <tr><th>Книга</th><th>Автор</th><th>Дата начала</th><th>Вернуть до</th><th>Статус</th><th>Действие</th></tr>
-
-    <tr th:each="b : ${taken}"
-        th:classappend="${b.status} == 'EXPIRED' ? 'expired-booking' : ''">
-
+    <thead>
+    <tr>
+        <th>Книга</th>
+        <th>Автор</th>
+        <th>Дата начала</th>
+        <th>Срок аренды</th>
+        <th>Статус</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="b : ${taken}" th:classappend="${b.status} == 'EXPIRED' ? 'expired-booking' : ''">
         <td th:text="${b.book.title}"></td>
         <td th:text="${b.book.author}"></td>
         <td th:text="${#temporals.format(b.rentStartDate, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${#temporals.format(b.rentEndDate, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${b.status}">Статус</td>
         <td>
-            <form th:action="@{/moderator/book_return/confirm}" method="post">
-                <input type="hidden" name="bookingId" th:value="${b.id}" />
-                <input type="hidden" name="userId" th:value="${b.user.id}" />
+            <form th:action="@{/moderator/rental/user/{userId}/book_return/booking{bookingId}/confirm(userId=${b.user.id}, bookingId=${b.id})}" method="post">
                 <button type="submit">Подтвердить возврат</button>
             </form>
         </td>
     </tr>
+    </tbody>
 </table>
 
+<!-- Просроченные аренды -->
 <h3>Просроченные аренды</h3>
 <table>
-    <tr><th>Книга</th><th>Автор</th><th>Срок возврата</th><th>Просрочена на</th><th>Действие</th></tr>
+    <thead>
+    <tr>
+        <th>Книга</th>
+        <th>Автор</th>
+        <th>Срок возврата</th>
+        <th>Дней просрочки</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
     <tr th:each="b : ${overdue}">
         <td th:text="${b.book.title}"></td>
         <td th:text="${b.book.author}"></td>
         <td th:text="${#temporals.format(b.rentEndDate, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${T(java.time.Duration).between(b.rentEndDate, T(java.time.LocalDateTime).now()).toDays() + ' дней'}"></td>
         <td>
-            <form th:action="@{/moderator/book_return/confirm}" method="post">
-                <input type="hidden" name="bookingId" th:value="${b.id}" />
-                <input type="hidden" name="userId" th:value="${b.user.id}" />
+            <form th:action="@{/moderator/rental/user/{userId}/book_return/booking{bookingId}/confirm(userId=${b.user.id}, bookingId=${b.id})}" method="post">
                 <button type="submit">Подтвердить возврат</button>
             </form>
         </td>
     </tr>
+    </tbody>
 </table>
 
+<!-- История аренд -->
 <h3>История аренд</h3>
 <table>
-    <tr><th>Книга</th><th>Автор</th><th>Дата возврата</th></tr>
+    <thead>
+    <tr>
+        <th>Книга</th>
+        <th>Автор</th>
+        <th>Дата возврата</th>
+    </tr>
+    </thead>
+    <tbody>
     <tr th:each="b : ${returned}">
         <td th:text="${b.book.title}"></td>
         <td th:text="${b.book.author}"></td>
         <td th:text="${#temporals.format(b.rentEndDate, 'dd.MM.yyyy HH:mm')}"></td>
     </tr>
+    </tbody>
 </table>
-
-<br>
 
 </body>
 </html>

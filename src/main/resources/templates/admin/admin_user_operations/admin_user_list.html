@@ -1,14 +1,20 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <title>Список пользователей</title>
-<!--  <link rel="stylesheet" href="../static/styles.css">-->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
-<form th:action="@{/admin}" method="get"><button type="submit">Назад в панель админа</button></form>
+<form th:action="@{/admin/admin_panel}" method="get"><button type="submit">Назад в панель админа</button></form>
 <form th:action="@{/}" method="get"><button type="submit">На главную</button></form>
 
 <h1>Список пользователей</h1>
+
+<h2>Поиск пользователя</h2>
+<form method="get" th:action="@{/admin/user/admin_user_list}">
+  <input type="text" name="username" placeholder="Имя пользователя" th:value="${username}" />
+  <button type="submit" class="btn">Найти</button>
+</form>
 
 <table border="1">
   <thead>
@@ -27,13 +33,16 @@
     <td th:text="${user.role}"></td>
     <td th:text="${user.blocked} ? 'Да' : 'Нет'"></td>
     <td>
-      <form th:action="@{'/admin/admin_user_operations/admin_user_list/delete/' + ${user.id}}" method="post" th:if="${user.username != 'admin'}">
+      <form th:action="@{/admin/user/admin_user_list/user/{userId}/delete(userId=${user.id})}"
+            method="post" th:if="${user.username != 'admin'}">
         <button type="submit">Удалить</button>
       </form>
-      <form th:action="@{'/admin/admin_user_operations/admin_user_list/promote/' + ${user.id}}" method="post" th:if="${user.role.name() == 'USER'}">
+      <form th:action="@{/admin/user/admin_user_list/user/{userId}promote(userId=${user.id})}"
+            method="post" th:if="${user.role.name() == 'USER'}">
         <button type="submit">Сделать модератором</button>
       </form>
-      <form th:action="@{'/admin/admin_user_operations/admin_user_list/demote/' + ${user.id}}" method="post" th:if="${user.role.name() == 'MODERATOR'}">
+      <form th:action="@{/admin/user/admin_user_list/user/{userId}/demote/(userId=${user.id})}"
+            method="post" th:if="${user.role.name() == 'MODERATOR'}">
         <button type="submit">Сделать пользователем</button>
       </form>
     </td>

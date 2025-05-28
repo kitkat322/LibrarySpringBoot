@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Библиотека</title>
-<!--  <link rel="stylesheet" href="../static/css/styles.css">-->
+    <meta charset="UTF-8">
+    <title>Библиотека</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
-<h1>Добро пожаловать в библиотеку</h1>
-
-<form th:action="@{/books}" method="get" style="display: inline;">
-    <button type="submit" class="btn">Список книг</button>
-</form>
-
-<div th:if="${#authorization.expression('isAuthenticated()')}">
-
-    <form th:action="@{/user/user_panel}" method="get" style="display: inline;">
-        <button type="submit" class="btn">Кабинет пользователя</button>
-    </form>
-
-    <form th:action="@{/admin}" method="get" style="display: inline;" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
-        <button type="submit" class="btn">Панель админа</button>
-    </form>
-
-    <form th:action="@{/moderator/moderator_panel}" method="get" style="display: inline;" th:if="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')')}">
-        <button type="submit" class="btn">Кабинет модератора</button>
-    </form>
-
-    <form th:action="@{/logout}" method="post" style="display: inline;">
-        <button type="submit" class="btn btn-danger">Выйти</button>
-    </form>
+<div id="welcome-section">
+    <h1>Добро пожаловать в библиотеку</h1>
 </div>
 
-<div th:if="${#authorization.expression('!isAuthenticated()')}">
-    <form th:action="@{/registration}" method="get" style="display: inline;">
-        <button type="submit" class="btn">Регистрация</button>
+<div id="button-container">
+    <form th:action="@{/books}" method="get">
+        <button type="submit" class="btn">Список книг</button>
     </form>
-    <form th:action="@{/login}" method="get" style="display: inline;">
-        <button type="submit" class="btn">Войти</button>
-    </form>
+
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <form th:action="@{/user/user_panel}" method="get">
+            <button type="submit" class="btn">Кабинет пользователя</button>
+        </form>
+
+        <form th:action="@{/admin/admin_panel}" method="get" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
+            <button type="submit" class="btn">Панель админа</button>
+        </form>
+
+        <form th:action="@{/moderator/moderator_panel}" method="get" th:if="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')')}">
+            <button type="submit" class="btn">Кабинет модератора</button>
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-danger">Выйти</button>
+        </form>
+    </div>
+
+    <div th:if="${#authorization.expression('!isAuthenticated()')}">
+        <form th:action="@{/registration}" method="get">
+            <button type="submit" class="btn">Регистрация</button>
+        </form>
+        <form th:action="@{/login}" method="get">
+            <button type="submit" class="btn">Войти</button>
+        </form>
+    </div>
 </div>
 
 </body>

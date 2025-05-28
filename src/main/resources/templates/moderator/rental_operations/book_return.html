@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Возврат книг</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        .btn { padding: 5px 10px; background-color: #1976d2; color: white; border: none; border-radius: 3px; cursor: pointer; }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <h2>Возврат книг</h2>
@@ -30,9 +26,8 @@
         <td th:text="${#temporals.format(booking.rentEndDate, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${booking.rentEndDate.isBefore(T(java.time.LocalDateTime).now()) ? 'Да' : 'Нет'}"></td>
         <td>
-            <form th:action="@{/moderator/book_return/confirm}" method="post">
-                <input type="hidden" name="bookingId" th:value="${booking.id}" />
-                <button type="submit" class="btn">Подтвердить возврат</button>
+            <form th:action="@{/moderator/rental/user/{userId}/book_return/booking{bookingId}/confirm(userId=${b.user.id}, bookingId=${b.id})}" method="post">
+                <button type="submit">Подтвердить возврат</button>
             </form>
         </td>
     </tr>
