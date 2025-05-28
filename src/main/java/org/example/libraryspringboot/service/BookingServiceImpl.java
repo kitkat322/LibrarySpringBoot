@@ -56,11 +56,11 @@ public class BookingServiceImpl implements BookingService {
 
 
     public List<Booking> getUserBookingsByStatus(User user, Booking.Status status) {
-        return bookingRepository.findByUserAndStatus(user, status);
+        return bookingRepository.findByUserAndStatusOrderByRentEndDateDesc(user, status);
     }
 
     public List<Booking> getUserOverdueRentals(User user) {
-        return bookingRepository.findByUserAndStatusAndRentEndDateBefore(user, Booking.Status.EXPIRED, LocalDateTime.now());
+        return bookingRepository.findByUserAndStatusAndRentEndDateBeforeOrderByRentEndDateDesc(user, Booking.Status.EXPIRED, LocalDateTime.now());
     }
 
 
@@ -72,7 +72,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> getActiveRentals(String username) {
-        return bookingRepository.findByUserUsernameAndStatusIn(
+        return bookingRepository.findByUserUsernameAndStatusInOrderByRentEndDateDesc(
                 username,
                 List.of(Booking.Status.TAKEN, Booking.Status.EXPIRED)
         );

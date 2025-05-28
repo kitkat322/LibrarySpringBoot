@@ -28,7 +28,11 @@
     <tbody>
     <tr th:each="user : ${users}">
         <td th:text="${user.username}"></td>
-        <td><a th:href="@{'/moderator/user/' + ${user.id}}" class="btn">Посмотреть бронирования</a></td>
+        <td>
+            <form th:action="@{'/moderator/user/' + ${user.id}}" method="get" style="display: inline;">
+                <button type="submit" class="btn">Посмотреть бронирования</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

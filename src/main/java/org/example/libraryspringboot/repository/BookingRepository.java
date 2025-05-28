@@ -26,16 +26,16 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query("SELECT b FROM Booking b WHERE b.status = 'ACTIVE' AND b.rentEndDate < :today")
     List<Booking> findOverdueBookings(@Param("today") LocalDate today);
 
-    List<Booking> findByUserAndStatus(User user, Booking.Status status);
+    List<Booking> findByUserAndStatusOrderByRentEndDateDesc(User user, Booking.Status status);
 
-    List<Booking> findByUserAndStatusAndRentEndDateBefore(User user, Booking.Status status, LocalDateTime dateTime);
+    List<Booking> findByUserAndStatusAndRentEndDateBeforeOrderByRentEndDateDesc(User user, Booking.Status status, LocalDateTime dateTime);
 
     @Query("SELECT b FROM Booking b WHERE b.user.id = :userId AND b.returned = false AND b.rentEndDate < CURRENT_DATE")
     List<Booking> findOverdueBookingsByUser(@Param("userId") int userId);
 
     List<Booking> findAllByRentEndDateBeforeAndReturnedFalse(LocalDateTime dateTime);
 
-    List<Booking> findByUserUsernameAndStatusIn(String username, List<Booking.Status> statuses);//StatusIn
+    List<Booking> findByUserUsernameAndStatusInOrderByRentEndDateDesc(String username, List<Booking.Status> statuses);//StatusIn
 
 
 }
