@@ -31,12 +31,12 @@ public class SecurityConfig {
 
     // Публичные ресурсы (доступны всем, даже неавторизованным)
     private static final String[] PUBLIC_URLS = {
-        "/", "/registration", "/login", "/books", "/css/**", "/js/**"
+        "/", "/registration", "/login", "/catalog/books", "/css/**", "/js/**"
     };
 
     // Только авторизованные пользователи (неважно кто именно)
     private static final String[] AUTHENTICATED_URLS = {
-            "/books/*/reserve"  // можно добавить сюда и другие защищённые пути
+            "/user/booking/book/*/reserve"  // можно добавить сюда и другие защищённые пути
     };
 
     // Пользователи с определёнными ролями
@@ -79,7 +79,7 @@ public class SecurityConfig {
         return http
                 //.csrf(AbstractHttpConfigurer::disable)
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/books/*/reserve") // если нужно отключить только для бронирования
+                        .ignoringRequestMatchers("/user/booking/book/*/reserve") // если нужно отключить только для бронирования
                 )
                 .requestCache(cache -> cache.requestCache(requestCache()))
                 .authorizeHttpRequests(auth -> auth
@@ -123,68 +123,3 @@ public class SecurityConfig {
 //        return engine;
 //    }
 }
-
-
-
-
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.SecurityFilterChain;
-//
-//@Configuration
-//@EnableWebSecurity
-//public class SecurityConfig {
-//
-//    @Autowired
-//    private UserDetailsService userDetailsService;
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/registration", "/login", "/books", "/css/**", "/js/**").permitAll()
-//                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-//                        .requestMatchers("/moderator/**").hasAnyAuthority("MODERATOR", "ADMIN")
-//                        .requestMatchers("/user/**").hasAnyAuthority("USER", "MODERATOR", "ADMIN")
-//                        .requestMatchers("/books/*/reserve").authenticated()
-//                        .anyRequest().authenticated()
-//
-//                )
-//                .formLogin(form -> form
-//                        .loginPage("/login")
-//                        .loginProcessingUrl("/login")
-//                        .defaultSuccessUrl("/", false)//false здесь означает: "использовать этот URL только если не было перехвата (неперехваченное логин-перенаправление
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout")
-//                        .logoutSuccessUrl("/login?logout")
-//                        .permitAll()
-//                )
-//                .build();
-//    }
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-//        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-//        authenticationManagerBuilder
-//                .userDetailsService(userDetailsService)
-//                .passwordEncoder(passwordEncoder());
-//        return authenticationManagerBuilder.build();
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//}

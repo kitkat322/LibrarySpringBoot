@@ -1,4 +1,4 @@
-package org.example.libraryspringboot.controller;
+package org.example.libraryspringboot.controller.user;
 
 import lombok.RequiredArgsConstructor;
 import org.example.libraryspringboot.service.BookingService;
@@ -15,11 +15,11 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-public class BookingController {
+public class UserBookingController {
 
     private final BookingService bookingService;
 
-    @PostMapping("/books/{id}/reserve")
+    @PostMapping("/user/booking/book/{id}/reserve")
     public String reserveBook(@PathVariable int id,
                               @AuthenticationPrincipal UserDetails userDetails,
                               RedirectAttributes redirectAttributes) {
@@ -35,12 +35,12 @@ public class BookingController {
         redirectAttributes.addFlashAttribute("messages", messages);
         redirectAttributes.addFlashAttribute("messageTypes", messageTypes);
 
-        return "redirect:/books";
+        return "redirect:/catalog/books";
     }
 
-    @PostMapping("/cancel-booking")
-    public String cancelBooking(@RequestParam("bookingId") int bookingId) {
+    @PostMapping("/user/booking/{bookingId}/cancel")
+    public String cancelBooking(@PathVariable("bookingId") int bookingId) {
         bookingService.cancelBooking(bookingId);
-        return "redirect:/user/account";
+        return "redirect:/user/user_panel";
     }
 }

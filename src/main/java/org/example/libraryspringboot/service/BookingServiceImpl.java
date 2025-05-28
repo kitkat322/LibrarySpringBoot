@@ -88,8 +88,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean reserveBook(int bookId, String username) {
-        Optional<Book> optionalBook = bookService.findById(bookId);
+    public boolean reserveBook(int id, String username) {
+        Optional<Book> optionalBook = bookService.findById(id);
         User user = userService.findByUsername(username);
 
         if (optionalBook.isEmpty() || user == null) return false;

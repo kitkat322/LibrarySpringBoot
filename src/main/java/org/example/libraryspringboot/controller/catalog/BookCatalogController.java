@@ -1,4 +1,4 @@
-package org.example.libraryspringboot.controller;
+package org.example.libraryspringboot.controller.catalog;
 
 import lombok.RequiredArgsConstructor;
 import org.example.libraryspringboot.entity.Book;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
-public class BookController {
+public class BookCatalogController {
 
     @Autowired
     private final BookService bookService;
@@ -29,7 +29,7 @@ public class BookController {
     @Autowired
     private final BookingService bookingService;
 
-    @GetMapping("/books")
+    @GetMapping("/catalog/books")
     public String showBooks(@RequestParam(value = "query", required = false) String query,
                             @RequestParam(value = "page", defaultValue = "1") int page,
                             @AuthenticationPrincipal UserDetails userDetails,
@@ -52,6 +52,6 @@ public class BookController {
         model.addAttribute("books", books);
 
         // другие параметры пагинации, сообщений и т.д.
-        return "public_book_list/book_list";
+        return "library_catalog/book_list";
     }
 }
