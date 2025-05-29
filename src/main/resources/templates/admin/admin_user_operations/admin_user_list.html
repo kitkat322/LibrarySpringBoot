@@ -1,19 +1,19 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <title>Список пользователей</title>
+  <title>List of users</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
-<form th:action="@{/admin/admin_panel}" method="get"><button type="submit">Назад в панель админа</button></form>
-<form th:action="@{/}" method="get"><button type="submit">На главную</button></form>
+<form th:action="@{/admin/admin_panel}" method="get"><button type="submit">Back to Admin Panel</button></form>
+<form th:action="@{/}" method="get"><button type="submit">Main Page</button></form>
 
-<h1>Список пользователей</h1>
+<h1>List of users</h1>
 
-<h2>Поиск пользователя</h2>
+<h2>Search User</h2>
 <form method="get" th:action="@{/admin/user/admin_user_list}">
-  <input type="text" name="username" placeholder="Имя пользователя" th:value="${username}" />
-  <button type="submit" class="btn">Найти</button>
+  <input type="text" name="username" placeholder="Username" th:value="${username}" />
+  <button type="submit" class="btn">Find</button>
 </form>
 
 <table border="1">
@@ -31,19 +31,19 @@
     <td th:text="${user.id}"></td>
     <td th:text="${user.username}"></td>
     <td th:text="${user.role}"></td>
-    <td th:text="${user.blocked} ? 'Да' : 'Нет'"></td>
+    <td th:text="${user.blocked} ? 'Yes' : 'No'"></td>
     <td>
       <form th:action="@{/admin/user/admin_user_list/user/{userId}/delete(userId=${user.id})}"
             method="post" th:if="${user.username != 'admin'}">
-        <button type="submit">Удалить</button>
+        <button type="submit">Delete</button>
       </form>
       <form th:action="@{/admin/user/admin_user_list/user/{userId}promote(userId=${user.id})}"
             method="post" th:if="${user.role.name() == 'USER'}">
-        <button type="submit">Сделать модератором</button>
+        <button type="submit">Promote to Moderator</button>
       </form>
       <form th:action="@{/admin/user/admin_user_list/user/{userId}/demote/(userId=${user.id})}"
             method="post" th:if="${user.role.name() == 'MODERATOR'}">
-        <button type="submit">Сделать пользователем</button>
+        <button type="submit">Demote to User</button>
       </form>
     </td>
   </tr>
@@ -51,8 +51,6 @@
 </table>
 
 <br>
-
-
 
 </body>
 </html>

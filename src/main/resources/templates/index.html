@@ -8,38 +8,38 @@
 <body>
 
 <div id="welcome-section">
-    <h1>Добро пожаловать в библиотеку</h1>
+    <h1>Welcome to the library</h1>
 </div>
 
 <div id="button-container">
     <form th:action="@{/catalog/books}" method="get">
-        <button type="submit" class="btn">Список книг</button>
+        <button type="submit" class="btn">Book list</button>
     </form>
 
     <div th:if="${#authorization.expression('isAuthenticated()')}">
         <form th:action="@{/user/user_panel}" method="get">
-            <button type="submit" class="btn">Кабинет пользователя</button>
+            <button type="submit" class="btn">User panel</button>
         </form>
 
         <form th:action="@{/admin/admin_panel}" method="get" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
-            <button type="submit" class="btn">Панель админа</button>
+            <button type="submit" class="btn">Admin panel</button>
         </form>
 
         <form th:action="@{/moderator/moderator_panel}" method="get" th:if="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')')}">
-            <button type="submit" class="btn">Кабинет модератора</button>
+            <button type="submit" class="btn">Moderator panel</button>
         </form>
 
         <form th:action="@{/logout}" method="post">
-            <button type="submit" class="btn btn-danger">Выйти</button>
+            <button type="submit" class="btn btn-danger">Logout</button>
         </form>
     </div>
 
     <div th:if="${#authorization.expression('!isAuthenticated()')}">
         <form th:action="@{/registration}" method="get">
-            <button type="submit" class="btn">Регистрация</button>
+            <button type="submit" class="btn">Registration</button>
         </form>
         <form th:action="@{/login}" method="get">
-            <button type="submit" class="btn">Войти</button>
+            <button type="submit" class="btn">Login</button>
         </form>
     </div>
 </div>

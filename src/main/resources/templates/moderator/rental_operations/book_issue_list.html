@@ -2,68 +2,55 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Выдача книг</title>
+  <title>Moderator Issue Books</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
 <form th:action="@{/moderator/user/{userId}(userId=${userId})}" method="get" style="display:inline;">
-  <button type="submit">Назад</button>
+  <button type="submit">Back</button>
 </form>
 
 <form th:action="@{/}" method="get" style="display:inline;">
-  <button type="submit">На главную</button>
+  <button type="submit">Main Page</button>
 </form>
 
 <form th:action="@{/moderator/moderator_panel}" method="get" style="display:inline;">
-  <button type="submit">Кабинет модератора</button>
+  <button type="submit">Moderator Panel</button>
 </form>
 
-<h2 th:text="'Выдать книги пользователю: ' + ${username}">Выдать книги пользователю:</h2>
+<h2 th:text="'Issue Books to User: ' + ${username}">Issue Books to User:</h2>
 
-<h1>Список книг</h1>
+<h1>Book List</h1>
 
-<!-- Поиск -->
-<!--<form th:action="@{/moderator/rental/book_issue_list}" method="get">-->
+<!-- Search -->
 <form th:action="@{/moderator/rental/user/{userId}/book_issue_list(userId=${userId})}"
       method="get">
-  <input type="text" name="search" placeholder="Поиск по названию или автору" th:value="${search}" />
-  <button type="submit">Поиск</button>
+  <input type="text" name="search" placeholder="Search by Title or Author" th:value="${search}" />
+  <button type="submit">Search</button>
 </form>
 
-<!-- Сообщения -->
+<!-- Messages -->
 <p th:if="${message}" th:text="${message}" class="success"></p>
 <p th:if="${error}" th:text="${error}" class="error"></p>
 
 <table>
   <thead>
-  <tr><th>Название</th><th>Автор</th><th>Действие</th></tr>
+  <tr><th>Title</th><th>Author</th><th>Action</th></tr>
   </thead>
   <tbody>
   <tr th:each="book : ${books}">
-    <td><a th:href="@{'/moderator/book/' + ${book.id}}" th:text="${book.title}">Книга</a></td>
-    <td th:text="${book.author}">Автор</td>
+    <td><a th:href="@{'/moderator/book/' + ${book.id}}" th:text="${book.title}">Book</a></td>
+    <td th:text="${book.author}">Author</td>
     <td>
       <div th:if="${book.available}">
-<!--        <form th:action="@{'/moderator/rental/book_issue_list/book/' + ${book.id} + '/issue_confirm'}" -->
-<!--              method="post">-->
-<!--          <input type="hidden" name="username" th:value="${username}" />-->
-<!--          <input type="hidden" name="userId" th:value="${userId}" />-->
-<!--          <button type="submit">Выдать книгу</button>-->
-<!--        </form>-->
         <form th:action="@{/moderator/rental/user/{userId}/book_issue_list/book/{id}/issue_confirm(userId=${userId}, id=${book.id})}"
               method="post">
-<!--          <input type="hidden" name="username" th:value="${username}" />-->
           <input type="hidden" name="search" th:value="${search}" />
-          <button type="submit">Выдать книгу</button>
+          <button type="submit">Issue Book</button>
         </form>
       </div>
-      <span th:if="${!book.available}">Недоступна</span>
-
-      <div th:if="${messages != null and messages[book.id] != null}"
-           th:text="${messages[book.id]}"
-           th:classappend="${messageTypes[book.id]} == 'success' ? ' success-message' : ' error-message'">
-      </div>
+      <span th:if="${!book.available}">Unavailable</span>
     </td>
   </tr>
   </tbody>

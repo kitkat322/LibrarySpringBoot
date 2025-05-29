@@ -2,20 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Возврат книг</title>
+    <title>Return Books</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h2>Возврат книг</h2>
+<h2>Return Books</h2>
 <table>
     <thead>
     <tr>
-        <th>Пользователь</th>
-        <th>Книга</th>
-        <th>Дата начала аренды</th>
-        <th>Срок возврата</th>
-        <th>Просрочена?</th>
-        <th>Действие</th>
+        <th>User</th>
+        <th>Book</th>
+        <th>Rental Start Date</th>
+        <th>Return Deadline</th>
+        <th>Overdue?</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -24,16 +24,17 @@
         <td th:text="${booking.book.title}"></td>
         <td th:text="${#temporals.format(booking.rentStartDate, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${#temporals.format(booking.rentEndDate, 'dd.MM.yyyy HH:mm')}"></td>
-        <td th:text="${booking.rentEndDate.isBefore(T(java.time.LocalDateTime).now()) ? 'Да' : 'Нет'}"></td>
+        <td th:text="${booking.rentEndDate.isBefore(T(java.time.LocalDateTime).now()) ? 'Yes' : 'No'}"></td>
         <td>
-            <form th:action="@{/moderator/rental/user/{userId}/book_return/booking{bookingId}/confirm(userId=${b.user.id}, bookingId=${b.id})}" method="post">
-                <button type="submit">Подтвердить возврат</button>
+            <form th:action="@{/moderator/rental/user/{userId}/book_return/booking{bookingId}/confirm(userId=${b.user.id}, bookingId=${b.id})}"
+                  method="post">
+                <button type="submit">Confirm Return</button>
             </form>
         </td>
     </tr>
     </tbody>
 </table>
 <br>
-<a th:href="@{/moderator/moderator_panel}">Назад</a>
+<a th:href="@{/moderator/moderator_panel}">Back</a>
 </body>
 </html>

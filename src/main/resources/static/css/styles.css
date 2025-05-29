@@ -174,3 +174,33 @@ form {
     font-weight: bold;
     color: #333;
 }
+
+/* Центрирование контента на странице */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Горизонтально по центру */
+    justify-content: center; /* Вертикально по центру */
+    height: 75vh; /* Высота экрана */
+}
+
+/* Поля ввода и кнопки */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%; /* Поля сохраняют адаптивность */
+    max-width: 400px; /* Ограничение ширины */
+}
+
+.login-form input {
+    width: 100%; /* Растянуть поля на всю ширину */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Пространство между кнопками */
+    width: 48%;
+}

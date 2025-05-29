@@ -1,36 +1,36 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Пользователи</title>
+    <title>Moderator Users List</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
 <form th:action="@{/}" method="get" style="display: inline;">
-    <button type="submit" class="btn">На главную</button>
+    <button type="submit" class="btn">Main Page</button>
 </form>
 
 <form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
-    <button type="submit">Назад в кабинет модератора</button>
+    <button type="submit">Back to Moderator Panel</button>
 </form>
 
-<h2>Поиск пользователя</h2>
+<h2>User Search</h2>
 <form method="get" th:action="@{/moderator/user/user_list}">
-    <input type="text" name="username" placeholder="Имя пользователя" th:value="${username}" />
-    <button type="submit" class="btn">Найти</button>
+    <input type="text" name="username" placeholder="Username" th:value="${username}" />
+    <button type="submit" class="btn">Search</button>
 </form>
 
-<h2>Список пользователей</h2>
+<h2>User List</h2>
 <table>
     <thead>
-    <tr><th>Имя пользователя</th><th>Действие</th></tr>
+    <tr><th>Username</th><th>Action</th></tr>
     </thead>
     <tbody>
     <tr th:each="user : ${users}">
         <td th:text="${user.username}"></td>
         <td>
             <form th:action="@{'/moderator/user/' + ${user.id}}" method="get" style="display: inline;">
-                <button type="submit" class="btn">Посмотреть бронирования</button>
+                <button type="submit" class="btn">View Bookings</button>
             </form>
         </td>
     </tr>
@@ -39,7 +39,7 @@
 
 <br>
 <form th:action="@{/moderator/moderator_panel}" method="get" style="display: inline;">
-    <button type="submit" class="btn">Назад</button>
+    <button type="submit" class="btn">Back</button>
 </form>
 
 </body>

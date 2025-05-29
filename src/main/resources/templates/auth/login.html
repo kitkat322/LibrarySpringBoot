@@ -1,46 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Вход</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
-<!-- На главную -->
-<form th:action="@{/}" method="get" style="display: inline;">
-    <button type="submit" class="btn">На главную</button>
+<!-- To the Main Page -->
+<form th:action="@{/}" method="get" style="position: absolute; top: 20px; left: 20px;">
+    <button type="submit" class="btn">Main Page</button>
 </form>
 
-<h2>Вход в систему</h2>
+<div class="login-container">
+    <h2>Login</h2>
 
-<!-- Кнопка "Регистрация" -->
-<div class="button-container">
-    <form th:action="@{/registration}" method="get">
-        <button type="submit" class="btn">Регистрация</button>
+    <!-- Login Form -->
+    <form th:action="@{/login}" method="post" class="login-form">
+        <div class="input-container">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required />
+        </div>
+        <div class="input-container">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required />
+        </div>
+
+        <!-- Buttons "Login" and "Register" -->
+        <div class="button-container">
+            <button type="submit" class="btn">Login</button>
+        </div>
     </form>
-</div>
 
-
-<div th:if="${param.error}" class="error-message">Неверное имя пользователя или пароль</div>
-<div th:if="${param.logout}" class="success-message">Вы вышли из системы</div>
-
-<!-- Форма входа -->
-<form th:action="@{/login}" method="post">
-    <div class="input-container">
-        <label for="username">Имя пользователя</label>
-        <input type="text" name="username" id="username" required />
-    </div>
-    <div class="input-container">
-        <label for="password">Пароль</label>
-        <input type="password" name="password" id="password" required />
-    </div>
-
-    <!-- Кнопки "Войти" и "Регистрация" -->
     <div class="button-container">
-        <button type="submit" class="btn">Войти</button>
+        <form th:action="@{/registration}" method="get" style="display: inline;">
+            <button type="submit" class="btn">Register</button>
+        </form>
     </div>
-</form>
+
+
+
+    <!-- Error or logout messages -->
+    <div th:if="${param.error}" class="error-message">Invalid username or password</div>
+    <div th:if="${param.logout}" class="success-message">You have logged out</div>
+</div>
 
 </body>
 </html>

@@ -1,58 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Список книг</title>
+    <title>Book List</title>
     <link rel="stylesheet" href="/css/styles.css">
 
 </head>
 <body>
 
 <form th:action="@{/}" method="get" style="display: inline;">
-    <button type="submit" class="btn">На главную</button>
+    <button type="submit" class="btn">Main Page</button>
 </form>
 
 <form th:action="@{/user/user_panel}" method="get" style="display: inline;">
-    <button type="submit" class="btn">Кабинет пользователя</button>
+    <button type="submit" class="btn">User Panel</button>
 </form>
 
-<h1>Книги в библиотеке</h1>
+<h1>Books in the Library</h1>
 
 <form th:action="@{/catalog/books}" method="get">
-    <input type="text" name="query" placeholder="Название или автор книги" th:value="${param.query}" />
-    <button type="submit" class="btn">Поиск</button>
+    <input type="text" name="query" placeholder="Title or Author" th:value="${param.query}" />
+    <button type="submit" class="btn">Search</button>
 </form>
 
 <table>
     <thead>
     <tr>
-        <th>Название</th>
-        <th>Автор</th>
-        <th>Статус</th>
-        <th>Действие</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Status</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="book, iterStat : ${books}">
-        <td th:text="${book.title}">Название</td>
-        <td th:text="${book.author}">Автор</td>
-        <td th:text="${book.available ? 'Доступна' : 'Недоступна'}"></td>
+        <td th:text="${book.title}">Title</td>
+        <td th:text="${book.author}">Author</td>
+        <td th:text="${book.available ? 'Available' : 'Unavailable'}"></td>
         <td>
-<!--            <form th:if="${#authorization.expression('isAuthenticated()') and book.available and !isBlocked}"-->
-<!--                  th:action="@{'/books/' + ${book.id} + '/reserve'}"-->
-<!--                  method="post">-->
-<!--                <button type="submit" class="btn">Забронировать</button>-->
-<!--            </form>-->
             <form th:if="${#authorization.expression('isAuthenticated()') and book.available and !isBlocked}"
                   th:action="@{'/user/booking/book/' + ${book.id} + '/reserve'}"
                   method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="btn">Забронировать</button>
+                <button type="submit" class="btn">Reserve</button>
             </form>
 
             <form th:if="${#authorization.expression('!isAuthenticated()') and book.available}"
                   th:action="@{/login}" method="get">
-                <button type="submit" class="btn">Забронировать</button>
+                <button type="submit" class="btn">Reserve</button>
             </form>
             <span th:if="${messages != null and messages[book.id] != null}"
                   th:text="${messages[book.id]}"
@@ -61,22 +56,12 @@
 
             <span th:if="${isBlocked and #authorization.expression('isAuthenticated()') and book.available}"
                   class="error-message">
-    Вы заблокированы и не можете бронировать книги
+    You are blocked and cannot reserve books
 </span>
-
-
         </td>
     </tr>
     </tbody>
 </table>
-
-<div class="pagination" th:if="${totalPages > 1}">
-    <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-        <a th:href="@{/catalog/books(page=${i}, query=${param.query})}"
-           th:text="${i}"
-           th:classappend="${i == currentPage ? ' current-page' : ''}">1</a>
-    </span>
-</div>
 
 </body>
 </html>

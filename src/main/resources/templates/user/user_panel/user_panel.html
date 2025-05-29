@@ -1,82 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Кабинет пользователя</title>
+  <title>User Panel</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
 <div class="top-buttons">
   <form th:action="@{/}" method="get" style="display: inline;">
-    <button type="submit" class="btn">На главную</button>
+    <button type="submit" class="btn">Main Page</button>
   </form>
   <form th:action="@{/catalog/books}" method="get" style="display: inline;">
-    <button type="submit" class="btn">Список книг</button>
+    <button type="submit" class="btn">Book List</button>
   </form>
   <form th:action="@{/logout}" method="post" style="display: inline;">
-    <button type="submit" class="btn btn-danger">Выйти из кабинета</button>
+    <button type="submit" class="btn btn-danger">Logout</button>
   </form>
 </div>
 
-<h2>Забронированные книги</h2>
+<h2>Reserved Books</h2>
 <table>
   <thead>
   <tr>
-    <th>Название</th>
-    <th>Бронь действительна до</th>
-    <th>Действие</th>
+    <th>Title</th>
+    <th>Reservation Valid Until</th>
+    <th>Action</th>
   </tr>
   </thead>
   <tbody>
   <tr th:each="booking : ${bookings}">
-    <td th:text="${booking.book.title}">Название книги</td>
-    <td th:text="${#temporals.format(booking.pickupDeadline, 'dd.MM.yyyy HH:mm')}">Дата</td>
+    <td th:text="${booking.book.title}">Book Title</td>
+    <td th:text="${#temporals.format(booking.pickupDeadline, 'dd.MM.yyyy HH:mm')}">Date</td>
     <td>
       <form th:action="@{/user/booking/{bookingId}/cancel(bookingId=${booking.id})}"
             method="post">
-<!--        <input type="hidden" th:name="bookingId" th:value="${booking.id}" />-->
-        <button type="submit" class="btn btn-danger">Отменить бронирование</button>
+        <button type="submit" class="btn btn-danger">Cancel Reservation</button>
       </form>
     </td>
   </tr>
   </tbody>
 </table>
 
-<h2>Книги в аренде</h2>
+<h2>Rented Books</h2>
 <table>
   <thead>
   <tr>
-    <th>Название</th>
-    <th>Дата начала аренды</th>
-    <th>Необходимо вернуть до</th>
-    <th>Статус</th>
+    <th>Title</th>
+    <th>Rental Start Date</th>
+    <th>Must be Returned By</th>
+    <th>Status</th>
   </tr>
   </thead>
   <tbody>
   <tr th:each="rental : ${activeRentals}"
       th:classappend="${rental.status} == 'EXPIRED' ? 'expired-booking' : ''">
-    <td th:text="${rental.book.title}">Название книги</td>
-    <td th:text="${#temporals.format(rental.rentStartDate, 'dd.MM.yyyy HH:mm')}">Дата начала</td>
-    <td th:text="${#temporals.format(rental.rentEndDate, 'dd.MM.yyyy HH:mm')}">Срок возврата</td>
-    <td th:text="${rental.status}">Статус</td>
+    <td th:text="${rental.book.title}">Book Title</td>
+    <td th:text="${#temporals.format(rental.rentStartDate, 'dd.MM.yyyy HH:mm')}">Rental Start Date</td>
+    <td th:text="${#temporals.format(rental.rentEndDate, 'dd.MM.yyyy HH:mm')}">Return Deadline</td>
+    <td th:text="${rental.status}">Status</td>
   </tr>
 
   </tbody>
 </table>
 
-<h2>История аренды</h2>
+<h2>Rental History</h2>
 <table>
   <thead>
   <tr>
-    <th>Название</th>
-    <th>Дата возврата</th>
+    <th>Title</th>
+    <th>Return Date</th>
   </tr>
   </thead>
   <tbody>
   <tr th:each="history : ${returnedBooks}">
-    <td th:text="${history.book.title}">Название книги</td>
-    <td th:text="${#temporals.format(history.rentEndDate, 'dd.MM.yyyy')}">Дата возврата</td>
+    <td th:text="${history.book.title}">Book Title</td>
+    <td th:text="${#temporals.format(history.rentEndDate, 'dd.MM.yyyy')}">Return Date</td>
   </tr>
   </tbody>
 </table>

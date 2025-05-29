@@ -1,33 +1,33 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Админ панель</title>
+    <title>Admin Panel</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
 <!--<div sec:authorize="hasAuthority('ADMIN')">-->
-<!--    <a th:href="@{/admin}">Админ-панель</a>-->
+<!--    <a th:href="@{/admin}">Admin Panel</a>-->
 <!--</div>-->
 <div id="welcome-section">
-<h1>Добро пожаловать в админ-панель</h1>
+<h1>Welcome to the Admin Panel</h1>
 </div>
 
 <div id="button-container">
-    <form th:action="@{/}" method="get"><button type="submit">На главную</button></form>
+    <form th:action="@{/}" method="get"><button type="submit">Main Page</button></form>
 
     <form th:action="@{/user/user_panel}" method="get" sec:authorize="hasAnyAuthority('USER','MODERATOR','ADMIN')">
-        <button type="submit">Кабинет пользователя</button>
+        <button type="submit">User Panel</button>
     </form>
 
     <form th:action="@{/moderator/moderator_panel}" method="get" sec:authorize="hasAnyAuthority('MODERATOR','ADMIN')">
-        <button type="submit">Кабинет модератора</button>
+        <button type="submit">Moderator Panel</button>
     </form>
 
     <form th:action="@{/admin/user/admin_user_list}" method="get" sec:authorize="hasAuthority('ADMIN')">
-        <button type="submit">Список пользователей</button>
+        <button type="submit">List of users</button>
     </form>
 
-    <form th:action="@{/logout}" method="get"><button type="submit">Выйти</button></form>
+    <form th:action="@{/logout}" method="get"><button type="submit">Logout</button></form>
 </div>
 
 </body>
