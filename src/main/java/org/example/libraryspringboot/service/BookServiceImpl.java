@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
             bookRepository.save(existingBook);
         } else {
-            throw new EntityNotFoundException("Книга с id " + book.getId() + " не найдена");
+            throw new EntityNotFoundException("Book with id " + book.getId() + " is not found");
         }
     }
 
@@ -56,7 +56,7 @@ public class BookServiceImpl implements BookService {
             if (book.isAvailable()) {
                 bookRepository.deleteById(id);
             } else {
-                throw new IllegalStateException("Нельзя удалить книгу, которая сейчас находится в аренде.");
+                throw new IllegalStateException("It is not possible to delete a book that is currently issued");
             }
         } else {
             throw new EntityNotFoundException("Книга с id " + id + " не найдена");

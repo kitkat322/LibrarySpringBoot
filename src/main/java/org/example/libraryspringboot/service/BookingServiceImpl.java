@@ -108,12 +108,12 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public boolean issueBookManually(int bookId, int userId) {
         Book book = bookService.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Книга не найдена"));
+                .orElseThrow(() -> new RuntimeException("Book is not found"));
         if (!book.isAvailable()) return false;
 
         User user = userService.findUserById(userId);
         if (user == null) {
-            throw new RuntimeException("Пользователь не найден");
+            throw new RuntimeException("User is not found");
         }
 
         Booking booking = new Booking();

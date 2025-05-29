@@ -26,7 +26,7 @@ public class AuthController {
     @PostMapping("/registration")
     public String registerUserAccount(@ModelAttribute("user") User user, BindingResult bindingResult) {
         if (userService.findByUsername(user.getUsername()) != null) {
-            bindingResult.rejectValue("username", "error.user", "Пользователь уже существует!");
+            bindingResult.rejectValue("username", "error.user", "User with this username already exists!");
             return "auth/registration";
         }
 
