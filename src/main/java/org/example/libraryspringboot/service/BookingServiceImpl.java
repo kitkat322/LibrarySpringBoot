@@ -25,50 +25,17 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private final UserService userService;
 
+
+    //methods to get lists of books with different statuses
     @Override
     public List<Booking> getActiveBookings(String username) {
         return bookingRepository.findByUserUsernameAndStatus(username, Booking.Status.BOOKED);
     }
 
     @Override
-    public void confirmIssue(int bookingId) {
-        Booking booking = bookingRepository.findById(bookingId).orElse(null);
-        if (booking != null && booking.getStatus() == Booking.Status.BOOKED) {
-            booking.setStatus(Booking.Status.TAKEN);
-            booking.setRentStartDate(LocalDateTime.now());
-            // например, срок возврата через 14 дней:
-            booking.setRentEndDate(LocalDateTime.now().plusMinutes(1)); //.plusDays(14));
-            bookingRepository.save(booking);
-        }
-    }
-
-
-    public void confirmReturn(int bookingId) {
-        Booking booking = bookingRepository.findById(bookingId).orElse(null);
-        if (booking != null && (booking.getStatus() == Booking.Status.TAKEN || booking.getStatus() == Booking.Status.EXPIRED)) {
-            booking.setStatus(Booking.Status.RETURNED);
-            booking.setRentEndDate(LocalDateTime.now()); // фиксируем возврат
-            booking.setReturned(true);
-            bookService.markBookAsAvailable(booking.getBook());
-            bookingRepository.save(booking);
-        }
-    }
-
-
     public List<Booking> getUserBookingsByStatus(User user, Booking.Status status) {
         return bookingRepository.findByUserAndStatusOrderByRentEndDateDesc(user, status);
     }
-
-    public List<Booking> getUserOverdueRentals(User user) {
-        return bookingRepository.findByUserAndStatusAndRentEndDateBeforeOrderByRentEndDateDesc(user, Booking.Status.EXPIRED, LocalDateTime.now());
-    }
-
-
-
-//    @Override
-//    public List<Booking> getActiveRentals(String username) {
-//        return bookingRepository.findByUserUsernameAndStatus(username, Booking.Status.TAKEN);
-//    }
 
     @Override
     public List<Booking> getActiveRentals(String username) {
@@ -78,7 +45,11 @@ public class BookingServiceImpl implements BookingService {
         );
     }
 
-
+    @Override
+    public List<Booking> getUserOverdueRentals(User user) {
+        return bookingRepository.findByUserAndStatusAndRentEndDateBeforeOrderByRentEndDateDesc(
+                user, Booking.Status.EXPIRED, LocalDateTime.now());
+    }
 
     @Override
     public List<Booking> getReturnedBooks(String username) {
@@ -86,7 +57,10 @@ public class BookingServiceImpl implements BookingService {
                 Booking.Status.RETURNED, Booking.Status.CANCELLED, Booking.Status.EXPIRED
         ));
     }
+    //**********************************************************************
 
+
+    //booking and booking cancel (is used UserBookingController)
     @Override
     public boolean reserveBook(int id, String username) {
         Optional<Book> optionalBook = bookService.findById(id);
@@ -127,29 +101,10 @@ public class BookingServiceImpl implements BookingService {
             }
         }
     }
+//**********************************************************************
 
 
-    @Override
-    public List<Booking> getAllActiveBookings() {
-        return bookingRepository.findByStatus(Booking.Status.BOOKED);
-    }
-
-    @Override
-    public List<Booking> getAllActiveRentals() {
-        return bookingRepository.findByStatus(Booking.Status.TAKEN);
-    }
-
-
-    @Override
-    public List<Booking> getOverdueBookings() {
-        return bookingRepository.findOverdueBookings(LocalDate.now());
-    }
-
-    @Override
-    public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
-    }
-
+//confirm issue of a book manually from the book issue list (is used in ModeratorRentalController)
     @Override
     public boolean issueBookManually(int bookId, int userId) {
         Book book = bookService.findById(bookId)
@@ -176,19 +131,27 @@ public class BookingServiceImpl implements BookingService {
         bookService.saveBook(book);
         return true;
     }
+//**********************************************************************
 
+
+    //methods to update expired books and related updates (is used in BookCatalogController)
+    @Transactional
     public void updateBlockStatus(User user) {
+        System.out.println("updateBlockStatus*******************************************************");
         List<Booking> overdueBookings = bookingRepository.findOverdueBookingsByUser(user.getId());
         boolean isOverdue = !overdueBookings.isEmpty();
 
         // Обновляем только если статус реально изменился
         if (user.isBlocked() != isOverdue) {
             user.setBlocked(isOverdue);
-            userService.updateUser(user);  // 👈 безопасно, без перехеширования пароля
+            userService.updateUser(user);  // безопасно, без перехеширования пароля
         }
     }
 
+    //(is used in BookCatalogController and ModeratorUserController)
+    @Transactional
     public void updateExpiredBookings() {
+        System.out.println("Updating expired bookings*******************************************************");
         List<Booking> overdueBookings = bookingRepository.findAllByRentEndDateBeforeAndReturnedFalse(LocalDateTime.now());
 
         for (Booking booking : overdueBookings) {
@@ -196,5 +159,32 @@ public class BookingServiceImpl implements BookingService {
         }
 
         bookingRepository.saveAll(overdueBookings);
+    }
+    //**********************************************************************
+
+
+    //confirm issues and returns of books from a moderator view of a user's panel
+    @Override
+    public void confirmIssue(int bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElse(null);
+        if (booking != null && booking.getStatus() == Booking.Status.BOOKED) {
+            booking.setStatus(Booking.Status.TAKEN);
+            booking.setRentStartDate(LocalDateTime.now());
+            // например, срок возврата через 14 дней:
+            booking.setRentEndDate(LocalDateTime.now().plusMinutes(1)); //.plusDays(14));
+            bookingRepository.save(booking);
+        }
+    }
+
+    @Override
+    public void confirmReturn(int bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElse(null);
+        if (booking != null && (booking.getStatus() == Booking.Status.TAKEN || booking.getStatus() == Booking.Status.EXPIRED)) {
+            booking.setStatus(Booking.Status.RETURNED);
+            booking.setRentEndDate(LocalDateTime.now()); // фиксируем возврат
+            booking.setReturned(true);
+            bookService.markBookAsAvailable(booking.getBook());
+            bookingRepository.save(booking);
+        }
     }
 }

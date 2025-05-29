@@ -13,14 +13,7 @@ public interface BookingService {
     boolean reserveBook(int bookId, String username);
     void cancelBooking(int bookingId);
 
-    List<Booking> getAllActiveBookings();// Ожидают выдачи
     void confirmIssue(int bookingId);
-
-
-    List<Booking> getAllActiveRentals();// Уже выданы
-    void confirmReturn(int bookingId);
-        List<Booking> getOverdueBookings();     // Просроченные
-        List<Booking> getAllBookings();         // Все бронирования
 
 
     List<Booking> getUserBookingsByStatus(User user, Booking.Status status);
@@ -31,6 +24,7 @@ public interface BookingService {
     void updateBlockStatus(User user);
 
     void updateExpiredBookings();
+    void confirmReturn(int bookingId);
 
 
 }
