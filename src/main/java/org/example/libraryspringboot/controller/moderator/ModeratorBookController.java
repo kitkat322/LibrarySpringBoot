@@ -20,9 +20,10 @@ public class ModeratorBookController {
 
     @GetMapping("/book_list")
     public String showModeratorBookList(@RequestParam(value = "search", required = false) String search, Model model) {
-        List<Book> books = (search != null && !search.isBlank())
-                ? bookService.searchBooksByTitleOrAuthor(search)
-                : bookService.getAllBooks();
+        List<Book> books = bookService.searchOrGetAll(search);
+//                (search != null && !search.isBlank())
+//                ? bookService.searchBooksByTitleOrAuthor(search)
+//                : bookService.getAllBooks();
         model.addAttribute("books", books);
         model.addAttribute("search", search);
         return "moderator/book_operations/book_operations";
@@ -31,7 +32,7 @@ public class ModeratorBookController {
     @GetMapping("/{id}")
     public String viewBookDetails(@PathVariable int id, Model model) {
         Book book = bookService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Книга не найдена"));
+                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
         model.addAttribute("book", book);
         return "moderator/book_operations/book_details";
     }
@@ -53,7 +54,7 @@ public class ModeratorBookController {
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model) {
         Book book = bookService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Книга не найдена"));
+                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
         model.addAttribute("book", book);
         return "moderator/book_operations/book_edit";
     }

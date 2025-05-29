@@ -8,15 +8,21 @@ import java.util.Optional;
 
 public interface BookService {
 
-    List<Book> getAllBooks();
-    List<Book> searchBooksByTitleOrAuthor(String query);
+    //method to find a Book by id
     Optional<Book> findById(int id);
+
+    //main operations with a Book
+    void saveBook(Book book);
+    void updateBook(Book book);
+    void deleteBook(int id);
+
+    //methods to change book availability
     void markBookAsAvailable(Book book);
     void markBookAsUnavailable(Book book);
-    void deleteBook(int id);
-    void updateBook(Book book);
-    void saveBook(Book book);
-    Page<Book> getAllBooksPaginated(int page, int size);
-    Page<Book> searchBooksByTitleOrAuthor(String query, int page, int size);
+
+    //methods to find Lists of Books
     List<Book> searchOrGetAll(String query);
+    List<Book> searchBooksByTitleOrAuthor(String query);
+    List<Book> getAllBooks();
+    Page<Book> getAllBooksPaginated(int page, int size);
 }

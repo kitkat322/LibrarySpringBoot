@@ -24,17 +24,18 @@ public class ModeratorRentalController {
     private final BookService bookService;
     private final BookingService bookingService;
 
-    //запрос на получение страницы выдачи книг через список книг
+    //show moderator's view of the user panel
     @GetMapping("/moderator/rental/user/{userId}/book_issue_list")
-    public String showIssueBooks(@PathVariable int userId,
-                                 @RequestParam(value = "search", required = false) String search,
-                                 @ModelAttribute("messages") Map<Integer, String> messages,
-                                 @ModelAttribute("messageTypes") Map<Integer, String> messageTypes,
-                                 Model model) {
+    public String showManualBookIssueList(@PathVariable int userId,
+                                          @RequestParam(value = "search", required = false) String search,
+                                          @ModelAttribute("messages") Map<Integer, String> messages,
+                                          @ModelAttribute("messageTypes") Map<Integer, String> messageTypes,
+                                          Model model) {
         User user = userService.findUserById(userId);
-        List<Book> books = (search != null && !search.isBlank())
-                ? bookService.searchBooksByTitleOrAuthor(search)
-                : bookService.getAllBooks();
+        List<Book> books = bookService.searchOrGetAll(search);
+//                (search != null && !search.isBlank())
+//                ? bookService.searchBooksByTitleOrAuthor(search)
+//                : bookService.getAllBooks();
 
         model.addAttribute("books", books);
         model.addAttribute("search", search);
@@ -48,12 +49,12 @@ public class ModeratorRentalController {
         return "moderator/rental_operations/book_issue_list";
     }
 
-    //запрос на подтверждение выдачи книги на странице со списком книг
+    //confirmation of book return via book ID
     @PostMapping("/moderator/rental/user/{userId}/book_issue_list/book/{id}/issue_confirm")
-    public String issueBookToUser(@PathVariable int id,
-                                  @PathVariable int userId,
-                                  @RequestParam(required = false) String search,
-                                  RedirectAttributes redirectAttributes) {
+    public String confirmIssueFromManualBookIssueList(@PathVariable int id,
+                                                      @PathVariable int userId,
+                                                      @RequestParam(required = false) String search,
+                                                      RedirectAttributes redirectAttributes) {
 
         Map<Integer, String> messages = new HashMap<>();
         Map<Integer, String> messageTypes = new HashMap<>();
@@ -62,10 +63,10 @@ public class ModeratorRentalController {
         try {
             boolean success = bookingService.issueBookManually(id, userId);
             if (success) {
-                messages.put(id, "Книга выдана пользователю: " + user.getUsername());
+                messages.put(id, "The book has been issued to the user: " + user.getUsername());
                 messageTypes.put(id, "success");
             } else {
-                messages.put(id, "Не удалось выдать книгу. Возможно, она уже занята.");
+                messages.put(id, "Failed to issue the book. It may already be taken.");
                 messageTypes.put(id, "error");
             }
         } catch (Exception e) {
@@ -83,16 +84,18 @@ public class ModeratorRentalController {
         return "redirect:/moderator/rental/user/{userId}/book_issue_list";
     }
 
-    //подтверждение запроса гет о подтверждении выдачи книги
+    //confirmation of book issue via booking ID
     @PostMapping("/moderator/rental/user/{userId}/book_issue/booking{bookingId}/confirm")
-    public String confirmIssue(@PathVariable int bookingId, @PathVariable int userId) {
+    public String confirmIssueFromUserPage(@PathVariable int bookingId,
+                                           @PathVariable int userId) {
         bookingService.confirmIssue(bookingId);
         return "redirect:/moderator/user/{userId}";
     }
 
-    //подтверждение запроса гет о возврате книги
+    //confirmation of book return via booking ID
     @PostMapping("/moderator/rental/user/{userId}/book_return/booking{bookingId}/confirm")
-    public String confirmReturnFromUserPage(@PathVariable int bookingId, @PathVariable int userId) {
+    public String confirmReturnFromUserPage(@PathVariable int bookingId,
+                                            @PathVariable int userId) {
         bookingService.confirmReturn(bookingId);
         return "redirect:/moderator/user/{userId}";
     }

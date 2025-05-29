@@ -20,45 +20,16 @@ public class BookServiceImpl implements BookService {
     @Autowired
     BookRepository bookRepository;
 
-    @Override
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
-
-    public List<Book> searchBooksByTitleOrAuthor(String query) {
-        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(query, query);
-    }
-
+    //method to find a Book by Id
     @Override
     public Optional<Book> findById(int id) {
         return bookRepository.findById(id);
     }
 
+    //main operations with a Book
     @Override
-    public void markBookAsUnavailable(Book book) {
-        book.setAvailable(false);
+    public void saveBook(Book book) {
         bookRepository.save(book);
-    }
-
-    @Override
-    public void markBookAsAvailable(Book book) {
-        book.setAvailable(true);
-        bookRepository.save(book);
-    }
-
-    @Override
-    public void deleteBook(int id) {
-        Optional<Book> bookOpt = bookRepository.findById(id);
-        if (bookOpt.isPresent()) {
-            Book book = bookOpt.get();
-            if (book.isAvailable()) {
-                bookRepository.deleteById(id);
-            } else {
-                throw new IllegalStateException("Нельзя удалить книгу, которая сейчас находится в аренде.");
-            }
-        } else {
-            throw new EntityNotFoundException("Книга с id " + id + " не найдена");
-        }
     }
 
     @Override
@@ -78,28 +49,35 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void saveBook(Book book) {
+    public void deleteBook(int id) {
+        Optional<Book> bookOpt = bookRepository.findById(id);
+        if (bookOpt.isPresent()) {
+            Book book = bookOpt.get();
+            if (book.isAvailable()) {
+                bookRepository.deleteById(id);
+            } else {
+                throw new IllegalStateException("Нельзя удалить книгу, которая сейчас находится в аренде.");
+            }
+        } else {
+            throw new EntityNotFoundException("Книга с id " + id + " не найдена");
+        }
+    }
+
+    //methods to change book availability
+    @Override
+    public void markBookAsUnavailable(Book book) {
+        book.setAvailable(false);
         bookRepository.save(book);
     }
 
-
-
-
-
-
     @Override
-    public Page<Book> getAllBooksPaginated(int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        return bookRepository.findAll(pageable);
+    public void markBookAsAvailable(Book book) {
+        book.setAvailable(true);
+        bookRepository.save(book);
     }
 
+    //methods to find Lists of Books
     @Override
-    public Page<Book> searchBooksByTitleOrAuthor(String query, int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(query, query, pageable);
-    }
-
-
     public List<Book> searchOrGetAll(String query) {
         if (query != null && !query.trim().isEmpty()) {
             return searchBooksByTitleOrAuthor(query);
@@ -107,19 +85,21 @@ public class BookServiceImpl implements BookService {
         return getAllBooks();
     }
 
+    //methods for method List<Book> searchOrGetAll(String query)
+    @Override
+    public List<Book> searchBooksByTitleOrAuthor(String query) {
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(query, query);
+    }
 
+    @Override
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
 
-
-//    public boolean reserveBook(Long bookId) {
-//        Optional<Book> bookOptional = bookRepository.findById(bookId);
-//        if (bookOptional.isPresent()) {
-//            Book book = bookOptional.get();
-//            if (book.isAvailable()) {
-//                book.setAvailable(false); // или любое логическое поле
-//                bookRepository.save(book);
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    //method to make pageable list of books
+    @Override
+    public Page<Book> getAllBooksPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return bookRepository.findAll(pageable);
+    }
 }
