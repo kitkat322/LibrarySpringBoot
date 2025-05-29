@@ -18,6 +18,7 @@ public class ModeratorBookController {
     @Autowired
     private final BookService bookService;
 
+    //shows the list of books with the moderator`s functions
     @GetMapping("/book_list")
     public String showModeratorBookList(@RequestParam(value = "search", required = false) String search, Model model) {
         List<Book> books = bookService.searchOrGetAll(search);

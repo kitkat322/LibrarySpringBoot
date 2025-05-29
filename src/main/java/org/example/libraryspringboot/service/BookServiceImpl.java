@@ -20,7 +20,7 @@ public class BookServiceImpl implements BookService {
     @Autowired
     BookRepository bookRepository;
 
-    //method to find a Book by Id
+    //method to find a Book by id
     @Override
     public Optional<Book> findById(int id) {
         return bookRepository.findById(id);

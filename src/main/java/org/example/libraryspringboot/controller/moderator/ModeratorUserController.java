@@ -35,11 +35,15 @@ public class ModeratorUserController {
         return "moderator/moderator_user_operations/moderator_user_list";
     }
 
+    //shows the moderator's view of the user panel
     @GetMapping("/{userId}")
-    public String userBookings(@PathVariable int userId, Model model) {
+    public String userBookingsAndRentals(@PathVariable int userId, Model model) {
+
         bookingService.updateExpiredBookings();
 
         User user = userService.findUserById(userId);
+        bookingService.updateBlockStatus(user);
+
         model.addAttribute("user", user);
 
         model.addAttribute("booked", bookingService.getUserBookingsByStatus(user, Booking.Status.BOOKED));

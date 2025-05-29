@@ -1,7 +1,9 @@
 package org.example.libraryspringboot.controller.user;
 
 import lombok.RequiredArgsConstructor;
+import org.example.libraryspringboot.entity.User;
 import org.example.libraryspringboot.service.BookingService;
+import org.example.libraryspringboot.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,18 +19,22 @@ import java.util.Map;
 public class UserBookingController {
 
     private final BookingService bookingService;
+    private final UserService userService;
 
     @PostMapping("/user/booking/book/{id}/reserve")
     public String reserveBook(@PathVariable int id,
                               @AuthenticationPrincipal UserDetails userDetails,
                               RedirectAttributes redirectAttributes) {
+
+        User user = userService.findByUsername(userDetails.getUsername());
+        bookingService.updateBlockStatus(user);
         String username = userDetails.getUsername();
         boolean success = bookingService.reserveBook(id, username);
 
         Map<Integer, String> messages = new HashMap<>();
         Map<Integer, String> messageTypes = new HashMap<>();
 
-        messages.put(id, success ? "Книга успешно забронирована." : "Ошибка бронирования книги.");
+        messages.put(id, success ? "Booking is successful" : "Booking is failed. Book is already taken.");
         messageTypes.put(id, success ? "success" : "error");
 
         redirectAttributes.addFlashAttribute("messages", messages);

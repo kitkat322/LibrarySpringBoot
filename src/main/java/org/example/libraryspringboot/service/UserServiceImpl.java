@@ -31,6 +31,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    //main operations with a User
+    @Override
     public void updateUser(User user) {
         userRepository.save(user);
     }
@@ -40,11 +42,8 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
+    //method to get one user
     @Override
     public User findByUsername(String username) {
         return userRepository.findUserByUsername(username);
@@ -55,11 +54,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+
+    //methods to get lists of users
     @Override
     public List<User> findUsersByUsernameContaining(String username) {
         return userRepository.findByUsernameContainingIgnoreCase(username);
     }
 
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+
+    //methods for admin to change roles of other users
     @Override
     public void changeUserRoleToModerator(int id) {
         User user = userRepository.findById(id).orElse(null);

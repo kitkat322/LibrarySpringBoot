@@ -24,7 +24,7 @@ public class ModeratorRentalController {
     private final BookService bookService;
     private final BookingService bookingService;
 
-    //show moderator's view of the user panel
+    //shows moderator's view of bookList
     @GetMapping("/moderator/rental/user/{userId}/book_issue_list")
     public String showManualBookIssueList(@PathVariable int userId,
                                           @RequestParam(value = "search", required = false) String search,

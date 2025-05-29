@@ -21,6 +21,8 @@ public class UserController {
     public String userAccountPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         String username = userDetails.getUsername();
 
+        bookingService.updateExpiredBookings();
+
         model.addAttribute("bookings", bookingService.getActiveBookings(username));
         model.addAttribute("activeRentals", bookingService.getActiveRentals(username));
         //model.addAttribute("expiredRentals", bookingService.getExpiredRentals(username));
