@@ -28,8 +28,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findByUserAndStatusAndRentEndDateBeforeOrderByRentEndDateDesc(User user, Booking.Status status, LocalDateTime dateTime);
 
     //get all user`s rentals which rent_end_date is expired and which are not returned in the library
-    @Query("SELECT b FROM Booking b WHERE b.user.id = :userId AND b.returned = false AND b.rentEndDate < CURRENT_TIMESTAMP")
+//    @Query("SELECT b FROM Booking b WHERE b.user.id = :userId AND b.returned = false AND b.rentEndDate < CURRENT_TIMESTAMP")
+//    List<Booking> findOverdueBookingsByUser(@Param("userId") int userId);
+
+    @Query("SELECT b FROM Booking b WHERE b.user.id = :userId AND b.status = 'EXPIRED'")
     List<Booking> findOverdueBookingsByUser(@Param("userId") int userId);
+
+
+
 
     //get all rentals of all users which rent_end_date has expired, and they are not returned in the library
     List<Booking> findAllByRentEndDateBeforeAndReturnedFalse(LocalDateTime dateTime);
